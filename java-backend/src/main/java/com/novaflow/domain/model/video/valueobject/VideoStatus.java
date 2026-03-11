@@ -114,6 +114,13 @@ public class VideoStatus implements ValueObject {
         };
     }
 
+    /**
+     * 获取值
+     */
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return value;

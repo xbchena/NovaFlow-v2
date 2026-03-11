@@ -43,6 +43,13 @@ public class UserId {
         return new UserId(uuid.toString().replace("-", ""));
     }
 
+    /**
+     * 获取值
+     */
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return value;

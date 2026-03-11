@@ -19,6 +19,14 @@ public class VideoListResponse {
     private List<VideoInfo> videos;
     private Integer total;
 
+    /**
+     * 构造函数
+     */
+    public VideoListResponse(List<VideoInfo> videos, int total) {
+        this.videos = videos;
+        this.total = total;
+    }
+
     @Data
     @Builder
     @NoArgsConstructor

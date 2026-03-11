@@ -24,7 +24,7 @@ public class Video extends AggregateRoot {
     private VideoMetadata metadata;
     private Location location;
     private String errorMessage;
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean deleted;
 

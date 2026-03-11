@@ -1,7 +1,7 @@
 package com.novaflow.interfaces.rest;
 
 import com.novaflow.application.service.RecommendationApplicationService;
-import com.novaflow.common.Result;
+import com.novaflow.interfaces.dto.response.Result;
 import com.novaflow.interfaces.dto.request.SelectionRequest;
 import com.novaflow.interfaces.dto.response.RecommendationDetailResponse;
 import com.novaflow.interfaces.dto.response.RecommendationHistoryResponse;

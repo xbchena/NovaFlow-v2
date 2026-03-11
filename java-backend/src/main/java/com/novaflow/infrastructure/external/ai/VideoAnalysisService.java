@@ -30,5 +30,35 @@ public interface VideoAnalysisService {
             String thumbnailUrl,
             List<FoodRecommendation> recommendations,
             List<NearbyPlace> nearbyPlaces
-    ) {}
+    ) {
+        // 添加 getter 方法以兼容 Lombok 风格的调用
+        public String getSceneType() {
+            return sceneType;
+        }
+
+        public String getSceneDescription() {
+            return sceneDescription;
+        }
+
+        public String getThumbnailUrl() {
+            return thumbnailUrl;
+        }
+
+        public List<FoodRecommendation> getRecommendations() {
+            return recommendations;
+        }
+
+        public List<NearbyPlace> getNearbyPlaces() {
+            return nearbyPlaces;
+        }
+
+        // 添加兼容方法
+        public List<String> detectedObjects() {
+            return List.of(); // 默认返回空列表
+        }
+
+        public List<String> foodItems() {
+            return List.of(); // 默认返回空列表
+        }
+    }
 }

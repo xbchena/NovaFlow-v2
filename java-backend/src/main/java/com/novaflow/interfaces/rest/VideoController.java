@@ -1,7 +1,7 @@
 package com.novaflow.interfaces.rest;
 
 import com.novaflow.application.service.VideoProcessingApplicationService;
-import com.novaflow.common.Result;
+import com.novaflow.interfaces.dto.response.Result;
 import com.novaflow.interfaces.dto.request.VideoUploadRequest;
 import com.novaflow.interfaces.dto.response.VideoAnalysisResponse;
 import com.novaflow.interfaces.dto.response.VideoListResponse;

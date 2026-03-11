@@ -27,7 +27,7 @@
         <jwt.version>0.12.6</jwt.version>
         <aliyun-oss.version>3.18.1</aliyun-oss.version>
         <fastjson.version>2.0.50</fastjson.version>
-        <shardingsphere.version>5.3.2</shardingsphere.version>
+        <shardingsphere.version>5.1.2</shardingsphere.version>
     </properties>
 
     <dependencies>

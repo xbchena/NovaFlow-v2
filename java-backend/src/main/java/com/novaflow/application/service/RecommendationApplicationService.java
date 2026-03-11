@@ -13,6 +13,7 @@ import com.novaflow.domain.model.recommendation.valueobject.RecommendationItem;
 import com.novaflow.domain.model.recommendation.valueobject.SceneAnalysis;
 import com.novaflow.domain.model.shared.valueobject.UserId;
 import com.novaflow.domain.model.shared.valueobject.VideoId;
+import com.novaflow.domain.model.shared.valueobject.RecommendationId;
 import com.novaflow.domain.model.video.Video;
 import com.novaflow.domain.model.video.valueobject.Location;
 import com.novaflow.domain.repository.DomainEventPublisher;

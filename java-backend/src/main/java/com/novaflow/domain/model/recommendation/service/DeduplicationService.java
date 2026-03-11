@@ -56,12 +56,12 @@ public interface DeduplicationService {
                     .collect(Collectors.toList());
 
             // 3. 按得分排序
-            scoredItems.sort(Comparator.comparingInt(ScoredItem::getScore).reversed());
+            scoredItems.sort(Comparator.comparingInt(ScoredItem::score).reversed());
 
             // 4. 返回前N个
             return scoredItems.stream()
                     .limit(maxItems)
-                    .map(ScoredItem::getItem)
+                    .map(ScoredItem::item)
                     .collect(Collectors.toList());
         }
 

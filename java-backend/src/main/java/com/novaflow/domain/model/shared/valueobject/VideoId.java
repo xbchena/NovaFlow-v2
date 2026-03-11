@@ -43,6 +43,13 @@ public class VideoId {
         return new VideoId(uuid.toString().replace("-", ""));
     }
 
+    /**
+     * 获取值
+     */
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return value;

@@ -25,7 +25,7 @@ public class User extends AggregateRoot {
     private String avatar;
     private PhoneNumber phone;
     private UserPreferences preferences;
-    private final LocalDateTime createdAt;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean deleted;
 
