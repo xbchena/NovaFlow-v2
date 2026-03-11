@@ -1,0 +1,17 @@
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/entity/Video.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/controller/AuthController.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/entity/User.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/NovaFlowApplication.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/dto/LoginRequest.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/controller/RecommendationController.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/repository/RecommendationRepository.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/controller/VideoController.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/entity/Recommendation.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/controller/LocationController.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/repository/UserRepository.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/dto/AuthResponse.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/repository/UserSelectionRepository.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/entity/UserSelection.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/dto/WeChatCallbackRequest.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/common/Result.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/repository/VideoRepository.java

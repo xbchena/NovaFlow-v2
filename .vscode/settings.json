@@ -1,0 +1,13 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.configuration.detectJdksAtStart": true,
+    "java.configuration.runtimes": [],
+    "jdk.java.imports.groups": [
+        "java",
+        "javax",
+        "org",
+        "com",
+        ""
+    ]
+}
