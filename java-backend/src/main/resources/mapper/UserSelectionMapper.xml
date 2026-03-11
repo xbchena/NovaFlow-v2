@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.novaflow.infrastructure.persistence.mapper.UserSelectionMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.novaflow.infrastructure.persistence.po.UserSelectionPO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="video_id" property="videoId" jdbcType="BIGINT"/>
+        <result column="recommendation_id" property="recommendationId" jdbcType="BIGINT"/>
+        <result column="food_name" property="foodName" jdbcType="VARCHAR"/>
+        <result column="accepted" property="accepted" jdbcType="BOOLEAN"/>
+        <result column="feedback" property="feedback" jdbcType="VARCHAR"/>
+        <result column="selected_at" property="selectedAt" jdbcType="TIMESTAMP"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, user_id, video_id, recommendation_id, food_name, accepted, feedback,
+        selected_at, created_at, deleted
+    </sql>
+
+    <!-- 根据ID查询选择记录 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_selections
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据用户ID查询选择记录列表 -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_selections
+        WHERE user_id = #{userId}
+        AND deleted = 0
+        ORDER BY selected_at DESC
+    </select>
+
+    <!-- 根据用户ID和视频ID查询选择记录 -->
+    <select id="selectByUserIdAndVideoId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_selections
+        WHERE user_id = #{userId}
+        AND video_id = #{videoId}
+        AND deleted = 0
+        ORDER BY selected_at DESC
+        LIMIT 1
+    </select>
+
+    <!-- 根据推荐ID查询选择记录列表 -->
+    <select id="selectByRecommendationId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_selections
+        WHERE recommendation_id = #{recommendationId}
+        AND deleted = 0
+        ORDER BY selected_at DESC
+    </select>
+
+    <!-- 查询用户最近的选择记录 -->
+    <select id="selectRecentByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_selections
+        WHERE user_id = #{userId}
+        AND deleted = 0
+        ORDER BY selected_at DESC
+        LIMIT #{limit}
+    </select>
+
+    <!-- 批量查询选择记录 -->
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_selections
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND deleted = 0
+    </select>
+
+    <!-- 插入选择记录 -->
+    <insert id="insert" parameterType="com.novaflow.infrastructure.persistence.po.UserSelectionPO"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO user_selections (
+        user_id, video_id, recommendation_id, food_name, accepted, feedback,
+        selected_at, created_at, deleted
+        ) VALUES (
+        #{userId}, #{videoId}, #{recommendationId}, #{foodName}, #{accepted}, #{feedback},
+        #{selectedAt}, #{createdAt}, #{deleted}
+        )
+    </insert>
+
+    <!-- 更新选择记录 -->
+    <update id="update" parameterType="com.novaflow.infrastructure.persistence.po.UserSelectionPO">
+        UPDATE user_selections
+        <set>
+            <if test="foodName != null">food_name = #{foodName},</if>
+            <if test="accepted != null">accepted = #{accepted},</if>
+            <if test="feedback != null">feedback = #{feedback},</if>
+        </set>
+        WHERE id = #{id}
+        AND deleted = 0
+    </update>
+
+    <!-- 删除选择记录（软删除） -->
+    <update id="deleteById">
+        UPDATE user_selections
+        SET deleted = 1,
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 统计用户的选择记录数量 -->
+    <select id="countByUserId" resultType="long">
+        SELECT COUNT(*)
+        FROM user_selections
+        WHERE user_id = #{userId}
+        AND deleted = 0
+    </select>
+
+    <!-- 统计用户接受推荐的次数 -->
+    <select id="countAcceptedByUserId" resultType="long">
+        SELECT COUNT(*)
+        FROM user_selections
+        WHERE user_id = #{userId}
+        AND accepted = 1
+        AND deleted = 0
+    </select>
+
+    <!-- 统计用户拒绝推荐的次数 -->
+    <select id="countRejectedByUserId" resultType="long">
+        SELECT COUNT(*)
+        FROM user_selections
+        WHERE user_id = #{userId}
+        AND accepted = 0
+        AND deleted = 0
+    </select>
+
+    <!-- 统计选择记录总数 -->
+    <select id="countTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM user_selections
+        WHERE deleted = 0
+    </select>
+
+</mapper>

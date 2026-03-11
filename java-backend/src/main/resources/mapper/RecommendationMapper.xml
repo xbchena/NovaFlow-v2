@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.novaflow.infrastructure.persistence.mapper.RecommendationMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.novaflow.infrastructure.persistence.po.RecommendationPO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="video_id" property="videoId" jdbcType="BIGINT"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="scene_type" property="sceneType" jdbcType="VARCHAR"/>
+        <result column="scene_description" property="sceneDescription" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, user_id, video_id, content, scene_type, scene_description,
+        created_at, updated_at, deleted
+    </sql>
+
+    <!-- 根据ID查询推荐 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recommendations
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据用户ID查询推荐列表 -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recommendations
+        WHERE user_id = #{userId}
+        AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 根据用户ID分页查询推荐列表 -->
+    <select id="selectByUserIdAndPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recommendations
+        WHERE user_id = #{userId}
+        AND deleted = 0
+        ORDER BY created_at DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 根据视频ID查询推荐 -->
+    <select id="selectByVideoId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recommendations
+        WHERE video_id = #{videoId}
+        AND deleted = 0
+        LIMIT 1
+    </select>
+
+    <!-- 查询用户的最新推荐 -->
+    <select id="selectLatestByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recommendations
+        WHERE user_id = #{userId}
+        AND deleted = 0
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
+
+    <!-- 根据场景类型查询推荐 -->
+    <select id="selectBySceneType" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recommendations
+        WHERE scene_type = #{sceneType}
+        AND deleted = 0
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 批量查询推荐 -->
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM recommendations
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND deleted = 0
+    </select>
+
+    <!-- 插入推荐 -->
+    <insert id="insert" parameterType="com.novaflow.infrastructure.persistence.po.RecommendationPO"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO recommendations (
+        user_id, video_id, content, scene_type, scene_description,
+        created_at, updated_at, deleted
+        ) VALUES (
+        #{userId}, #{videoId}, #{content}, #{sceneType}, #{sceneDescription},
+        #{createdAt}, #{updatedAt}, #{deleted}
+        )
+    </insert>
+
+    <!-- 更新推荐 -->
+    <update id="update" parameterType="com.novaflow.infrastructure.persistence.po.RecommendationPO">
+        UPDATE recommendations
+        <set>
+            <if test="content != null">content = #{content},</if>
+            <if test="sceneType != null">scene_type = #{sceneType},</if>
+            <if test="sceneDescription != null">scene_description = #{sceneDescription},</if>
+            updated_at = #{updatedAt}
+        </set>
+        WHERE id = #{id}
+        AND deleted = 0
+    </update>
+
+    <!-- 更新推荐内容 -->
+    <update id="updateContent">
+        UPDATE recommendations
+        SET content = #{content},
+            updated_at = NOW()
+        WHERE id = #{id}
+        AND deleted = 0
+    </update>
+
+    <!-- 删除推荐（软删除） -->
+    <update id="deleteById">
+        UPDATE recommendations
+        SET deleted = 1,
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 统计用户的推荐数量 -->
+    <select id="countByUserId" resultType="long">
+        SELECT COUNT(*)
+        FROM recommendations
+        WHERE user_id = #{userId}
+        AND deleted = 0
+    </select>
+
+    <!-- 统计推荐总数 -->
+    <select id="countTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM recommendations
+        WHERE deleted = 0
+    </select>
+
+</mapper>
