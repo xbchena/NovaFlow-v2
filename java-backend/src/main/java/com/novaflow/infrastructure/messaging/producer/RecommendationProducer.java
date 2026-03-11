@@ -1,24 +1,24 @@
 package com.novaflow.infrastructure.messaging.producer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 
 /**
  * 推荐消息生产者
  * 负责发送推荐相关的消息到 RocketMQ
  */
-@Slf4j
 @Service
 public class RecommendationProducer {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(RecommendationProducer.class);
+    private static final Logger log = LoggerFactory.getLogger(RecommendationProducer.class);
 
     @Autowired
     private DefaultMQProducer producer;

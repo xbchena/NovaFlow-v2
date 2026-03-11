@@ -2,7 +2,6 @@ package com.novaflow.infrastructure.messaging.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.novaflow.infrastructure.messaging.producer.VideoProcessingProducer.VideoUploadMessage;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
  * 视频上传消息消费者
  * 处理视频上传相关的消息
  */
-@Slf4j
 @Service
 @RocketMQMessageListener(
         topic = "${rocketmq.topic.video-processing}",

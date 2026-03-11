@@ -2,7 +2,6 @@ package com.novaflow.infrastructure.messaging.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.novaflow.infrastructure.messaging.producer.RecommendationProducer.RecommendationMessage;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.slf4j.Logger;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
  * 推荐消息消费者
  * 处理推荐相关的消息
  */
-@Slf4j
 @Service
 @RocketMQMessageListener(
         topic = "${rocketmq.topic.recommendation}",

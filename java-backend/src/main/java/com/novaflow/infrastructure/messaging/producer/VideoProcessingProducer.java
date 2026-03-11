@@ -1,26 +1,24 @@
 package com.novaflow.infrastructure.messaging.producer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.nio.charset.StandardCharsets;
 
 /**
  * 视频处理消息生产者
  * 负责发送视频上传和分析相关的消息到 RocketMQ
  */
-@Slf4j
 @Service
 public class VideoProcessingProducer {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(VideoProcessingProducer.class);
+    private static final Logger log = LoggerFactory.getLogger(VideoProcessingProducer.class);
 
     @Autowired
     private DefaultMQProducer producer;
