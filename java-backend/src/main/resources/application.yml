@@ -41,13 +41,30 @@ spring:
           min-idle: 5
           max-wait: 2000ms
 
-  # RabbitMQ 配置
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
-    virtual-host: /novaflow
+  # RocketMQ 配置
+  rocketmq:
+    name-server: localhost:9876
+    producer:
+      group: novaflow-producer-group
+      send-message-timeout: 3000
+      retry-times-when-send-failed: 2
+      max-message-size: 4194304  # 4MB
+      compress-message-body-threshold: 4096
+    consumer:
+      group: novaflow-consumer-group
+      consume-thread-min: 5
+      consume-thread-max: 10
+      consume-timeout: 15
+      max-reconsume-times: 3  # 最大重试次数
+    # 主题配置
+    topic:
+      video-processing: video-processing-topic
+      recommendation: recommendation-topic
+    # 消费者组配置
+    consumer-group:
+      video-upload: video-upload-consumer-group
+      video-analysis: video-analysis-consumer-group
+      recommendation: recommendation-consumer-group
 
   # 文件上传配置
   servlet:
