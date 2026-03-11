@@ -1,3 +1,4 @@
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/impl/UserRepositoryImpl.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/external/sms/SmsService.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/interfaces/dto/response/RecommendationDetailResponse.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/feedback/event/UserSelectionCreatedEvent.java
@@ -9,6 +10,7 @@
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/application/service/VideoProcessingApplicationService.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/external/oss/OSSStorageService.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/exception/VideoNotFoundException.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/impl/VideoRepositoryImpl.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/repository/VideoRepository.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/event/VideoCreatedEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/application/service/RecommendationApplicationService.java
@@ -20,6 +22,7 @@
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/recommendation/valueobject/RecommendationItem.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/external/wechat/WeChatAuthService.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/exception/VideoProcessingFailedException.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/po/VideoPO.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/valueobject/VideoStatus.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/feedback/exception/SelectionNotFoundException.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/recommendation/valueobject/RecommendationHistory.java
@@ -29,7 +32,10 @@
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/external/sms/SmsServiceImpl.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/auth/event/UserPreferencesUpdatedEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/async/AsyncConfig.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/impl/UserSelectionRepositoryImpl.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/po/RecommendationPO.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/interfaces/dto/response/Result.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/mapper/RecommendationMapper.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/config/SnowflakeIdGenerator.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/repository/EventDispatchingRepository.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/recommendation/exception/RecommendationNotFoundException.java
@@ -46,6 +52,7 @@
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/external/ai/VideoAnalysisService.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/Video.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/exception/VideoUploadFailedException.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/impl/RecommendationRepositoryImpl.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/shared/valueobject/SelectionId.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/auth/exception/UserNotFoundException.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/feedback/event/FeedbackUpdatedEvent.java
@@ -78,11 +85,14 @@
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/event/VideoUploadCompletedEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/video/event/VideoProcessingFailedEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/external/map/MapService.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/po/UserSelectionPO.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/mapper/UserSelectionMapper.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/application/assembler/VideoAssembler.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/auth/event/PhoneBoundEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/recommendation/event/RecommendationItemClickedEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/shared/aggregate/AggregateRoot.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/interfaces/rest/VideoController.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/po/UserPO.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/feedback/valueobject/SatisfactionScore.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/application/command/recommendation/GenerateRecommendationCommand.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/config/RabbitMQConfig.java
@@ -102,6 +112,7 @@
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/application/command/video/VideoUploadCommand.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/interfaces/dto/request/WeChatCallbackRequest.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/recommendation/service/RecommendationGenerator.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/mapper/VideoMapper.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/interfaces/dto/response/RecommendationHistoryResponse.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/recommendation/event/RecommendationGeneratedEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/recommendation/exception/RecommendationGenerationFailedException.java
@@ -116,4 +127,5 @@
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/security/TokenService.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/feedback/event/SelectionUsedEvent.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/domain/model/shared/valueobject/ValueObject.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/persistence/mapper/UserMapper.java
 /Users/chenxiangbing/Developer/NovaFlow-v2/java-backend/src/main/java/com/novaflow/infrastructure/messaging/deadletter/DeadLetterQueueProcessor.java

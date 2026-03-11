@@ -26,10 +26,10 @@ public class UserAssembler {
     public static AuthResponse.UserInfo toUserInfo(User user) {
         return AuthResponse.UserInfo.builder()
                 .id(Long.valueOf(user.getUserId().getValue())) // 临时处理，可能需要调整
-                .openid(user.getOpenid() != null ? user.getOpenid().getValue() : null)
-                .nickname(user.getNickname())
-                .avatar(user.getAvatar())
-                .phone(user.getPhone() != null ? user.getPhone().getValue() : null)
+                .openid(user.openid() != null ? user.openid().getValue() : null)
+                .nickname(user.nickname())
+                .avatar(user.avatar())
+                .phone(user.phone() != null ? user.phone().getValue() : null)
                 .build();
     }
 }

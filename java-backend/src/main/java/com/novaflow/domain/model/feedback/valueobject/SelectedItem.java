@@ -59,4 +59,32 @@ public class SelectedItem implements ValueObject {
         }
         return placeName != null ? placeName : placeId;
     }
+
+    /**
+     * 获取食物名称
+     */
+    public String foodName() {
+        return foodName;
+    }
+
+    /**
+     * 获取地点ID
+     */
+    public String placeId() {
+        return placeId;
+    }
+
+    /**
+     * 获取地点名称
+     */
+    public String placeName() {
+        return placeName;
+    }
+
+    /**
+     * 获取选择时间
+     */
+    public LocalDateTime selectedAt() {
+        return selectedAt;
+    }
 }

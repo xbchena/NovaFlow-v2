@@ -23,4 +23,32 @@ public class LoginRequest {
     @NotBlank(message = "验证码不能为空")
     @Pattern(regexp = "^\\d{6}$", message = "验证码格式不正确")
     private String code;
+
+    /**
+     * 获取手机号
+     */
+    public String getPhone() {
+        return phone;
+    }
+
+    /**
+     * 获取验证码
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * 设置手机号
+     */
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    /**
+     * 设置验证码
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
 }

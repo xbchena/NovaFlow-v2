@@ -19,4 +19,32 @@ public class WeChatCallbackRequest {
      * 状态码
      */
     private String state;
+
+    /**
+     * 获取授权码
+     */
+    public String getCode() {
+        return code;
+    }
+
+    /**
+     * 获取状态码
+     */
+    public String getState() {
+        return state;
+    }
+
+    /**
+     * 设置授权码
+     */
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    /**
+     * 设置状态码
+     */
+    public void setState(String state) {
+        this.state = state;
+    }
 }

@@ -86,6 +86,27 @@ public class Feedback implements ValueObject {
     }
 
     /**
+     * 获取反馈类型
+     */
+    public FeedbackType type() {
+        return type;
+    }
+
+    /**
+     * 获取评论
+     */
+    public String comment() {
+        return comment;
+    }
+
+    /**
+     * 获取评分
+     */
+    public Integer rating() {
+        return rating;
+    }
+
+    /**
      * 反馈类型枚举
      */
     public enum FeedbackType {

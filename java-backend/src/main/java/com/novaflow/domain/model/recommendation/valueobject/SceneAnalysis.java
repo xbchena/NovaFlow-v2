@@ -115,4 +115,32 @@ public class SceneAnalysis implements ValueObject {
     public <T> T getMetadata(String key, Class<T> type) {
         return (T) metadata.get(key);
     }
+
+    /**
+     * 获取场景类型
+     */
+    public String sceneType() {
+        return sceneType;
+    }
+
+    /**
+     * 获取场景描述
+     */
+    public String sceneDescription() {
+        return sceneDescription;
+    }
+
+    /**
+     * 获取检测到的物体
+     */
+    public List<String> detectedObjects() {
+        return detectedObjects;
+    }
+
+    /**
+     * 获取识别的食物
+     */
+    public List<String> foodItems() {
+        return foodItems;
+    }
 }
