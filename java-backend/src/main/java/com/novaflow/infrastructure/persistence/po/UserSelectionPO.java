@@ -60,4 +60,85 @@ public class UserSelectionPO {
      * 是否删除
      */
     private Boolean deleted;
+
+    // 显式 getter/setter 方法
+    public Long getId() {
+        return id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getVideoId() {
+        return videoId;
+    }
+
+    public Long getRecommendationId() {
+        return recommendationId;
+    }
+
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public Boolean getAccepted() {
+        return accepted;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    public LocalDateTime getSelectedAt() {
+        return selectedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setVideoId(Long videoId) {
+        this.videoId = videoId;
+    }
+
+    public void setRecommendationId(Long recommendationId) {
+        this.recommendationId = recommendationId;
+    }
+
+    public void setFoodName(String foodName) {
+        this.foodName = foodName;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
+
+    public void setSelectedAt(LocalDateTime selectedAt) {
+        this.selectedAt = selectedAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 }

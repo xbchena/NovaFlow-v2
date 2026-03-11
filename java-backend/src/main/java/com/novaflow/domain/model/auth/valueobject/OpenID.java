@@ -48,4 +48,11 @@ public class OpenID implements ValueObject {
         }
         return "****";
     }
+
+    /**
+     * 获取值
+     */
+    public String getValue() {
+        return value;
+    }
 }

@@ -143,4 +143,29 @@ public class SceneAnalysis implements ValueObject {
     public List<String> foodItems() {
         return foodItems;
     }
+
+    // Explicit getters for Lombok compatibility (JavaBean convention)
+    public String getSceneType() {
+        return sceneType;
+    }
+
+    public String getSceneDescription() {
+        return sceneDescription;
+    }
+
+    public List<String> getDetectedObjects() {
+        return detectedObjects;
+    }
+
+    public List<String> getFoodItems() {
+        return foodItems;
+    }
+
+    public LocalDateTime getAnalyzedAt() {
+        return analyzedAt;
+    }
+
+    public Map<String, Object> getMetadata() {
+        return metadata;
+    }
 }

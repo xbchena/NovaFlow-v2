@@ -124,7 +124,7 @@ public class UserRepositoryImpl implements UserRepository {
         UserPO userPO = new UserPO();
 
         if (user.getId() != null) {
-            userPO.setId(Long.parseLong(user.getId().getValue()));
+            userPO.setId(Long.parseLong(user.getId()));
         }
 
         if (user.getOpenid() != null) {

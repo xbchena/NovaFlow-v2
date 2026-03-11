@@ -60,4 +60,85 @@ public class VideoPO {
      * 是否删除
      */
     private Boolean deleted;
+
+    // 显式 getter 方法
+    public Long getId() {
+        return id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getStorageInfo() {
+        return storageInfo;
+    }
+
+    public String getMetadata() {
+        return metadata;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setStorageInfo(String storageInfo) {
+        this.storageInfo = storageInfo;
+    }
+
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 }

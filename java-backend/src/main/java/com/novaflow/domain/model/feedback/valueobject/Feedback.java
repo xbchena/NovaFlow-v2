@@ -107,6 +107,13 @@ public class Feedback implements ValueObject {
     }
 
     /**
+     * 获取反馈类型 (Lombok 风格)
+     */
+    public FeedbackType getType() {
+        return type;
+    }
+
+    /**
      * 反馈类型枚举
      */
     public enum FeedbackType {

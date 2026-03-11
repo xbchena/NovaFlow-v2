@@ -1,6 +1,8 @@
 package com.novaflow.infrastructure.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class SnowflakeIdGenerator {
+
+    private static final Logger log = LoggerFactory.getLogger(SnowflakeIdGenerator.class);
 
     // 起始时间戳 (2024-01-01 00:00:00)
     private static final long START_TIMESTAMP = 1704067200000L;

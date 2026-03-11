@@ -27,6 +27,23 @@ public class OSSStorageInfo implements ValueObject {
         this.region = region;
     }
 
+    // Explicit getters for Lombok compatibility
+    public String getBucket() {
+        return bucket;
+    }
+
+    public String getObjectKey() {
+        return objectKey;
+    }
+
+    public String getOssUrl() {
+        return ossUrl;
+    }
+
+    public String getRegion() {
+        return region;
+    }
+
     /**
      * 创建OSS存储信息
      */

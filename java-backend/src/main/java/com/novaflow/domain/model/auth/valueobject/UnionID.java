@@ -24,6 +24,11 @@ public class UnionID implements ValueObject {
         this.value = value;
     }
 
+    // Explicit getter for Lombok compatibility
+    public String getValue() {
+        return value;
+    }
+
     /**
      * 从字符串创建UnionID
      * 允许null值

@@ -19,6 +19,31 @@ public class WeChatInfo implements ValueObject {
     private final String province;
     private final String city;
 
+    // Explicit getters for Lombok compatibility
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
     private WeChatInfo(Builder builder) {
         this.nickname = builder.nickname;
         this.avatar = builder.avatar;

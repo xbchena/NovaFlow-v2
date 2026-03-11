@@ -282,6 +282,62 @@ public class User extends AggregateRoot {
     }
 
     /**
+     * 获取 OpenID (Lombok 风格)
+     */
+    public OpenID getOpenid() {
+        return openid;
+    }
+
+    /**
+     * 获取 UnionID (Lombok 风格)
+     */
+    public UnionID getUnionid() {
+        return unionid;
+    }
+
+    /**
+     * 获取手机号 (Lombok 风格)
+     */
+    public PhoneNumber getPhone() {
+        return phone;
+    }
+
+    /**
+     * 获取用户偏好 (Lombok 风格)
+     */
+    public UserPreferences getPreferences() {
+        return preferences;
+    }
+
+    /**
+     * 获取昵称 (Lombok 风格)
+     */
+    public String getNickname() {
+        return nickname;
+    }
+
+    /**
+     * 获取头像 (Lombok 风格)
+     */
+    public String getAvatar() {
+        return avatar;
+    }
+
+    /**
+     * 获取创建时间 (Lombok 风格)
+     */
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * 获取更新时间 (Lombok 风格)
+     */
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
      * 从现有实体重建User聚合根（用于从数据库恢复）
      */
     public static User reconstruct(UserId userId, OpenID openid, UnionID unionid,

@@ -1,6 +1,8 @@
 package com.novaflow.infrastructure.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,6 +21,8 @@ import java.util.Map;
 @Slf4j
 @Configuration
 public class RabbitMQConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(RabbitMQConfig.class);
 
     // ==================== 交换机定义 ====================
 

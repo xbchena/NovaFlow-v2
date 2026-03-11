@@ -36,6 +36,31 @@ public class RecommendationItem implements ValueObject {
         this.imageUrl = imageUrl;
     }
 
+    // Explicit getters for Lombok compatibility
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public String getFoodType() {
+        return foodType;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public String getPriceHint() {
+        return priceHint;
+    }
+
+    public Integer getMatchScore() {
+        return matchScore;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     /**
      * 创建推荐项
      */

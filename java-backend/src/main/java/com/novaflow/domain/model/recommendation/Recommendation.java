@@ -211,6 +211,39 @@ public class Recommendation extends AggregateRoot {
         return recommendationId.getValue();
     }
 
+    // Explicit getters for Lombok compatibility
+    public RecommendationId getRecommendationId() {
+        return recommendationId;
+    }
+
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public VideoId getVideoId() {
+        return videoId;
+    }
+
+    public SceneAnalysis getSceneAnalysis() {
+        return sceneAnalysis;
+    }
+
+    public RecommendationContext getContext() {
+        return context;
+    }
+
+    public List<RecommendationItem> getItems() {
+        return items;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
     /**
      * 从数据库重建Recommendation聚合根
      */

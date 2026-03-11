@@ -46,7 +46,7 @@ public class UserSelectionRepositoryImpl implements UserSelectionRepository {
                 .toList();
     }
 
-    @Override
+    // Note: This method is not in the interface but is used internally
     public Optional<com.novaflow.domain.model.feedback.UserSelection> findByUserIdAndVideoId(
             UserId userId, VideoId videoId) {
         UserSelectionPO userSelectionPO = userSelectionMapper.selectByUserIdAndVideoId(
@@ -56,17 +56,20 @@ public class UserSelectionRepositoryImpl implements UserSelectionRepository {
         return Optional.ofNullable(toDomain(userSelectionPO));
     }
 
+    /**
+     * 根据推荐ID查找选择记录列表
+     */
     @Override
-    public List<com.novaflow.domain.model.feedback.UserSelection> findByRecommendationId(RecommendationId recommendationId) {
+    public Optional<com.novaflow.domain.model.feedback.UserSelection> findByRecommendationId(RecommendationId recommendationId) {
         List<UserSelectionPO> userSelectionPOList = userSelectionMapper.selectByRecommendationId(
                 Long.parseLong(recommendationId.getValue())
         );
-        return userSelectionPOList.stream()
-                .map(this::toDomain)
-                .toList();
+        return userSelectionPOList.isEmpty() ?
+                Optional.empty() :
+                Optional.ofNullable(toDomain(userSelectionPOList.get(0)));
     }
 
-    @Override
+    // Note: This method is not in the interface but is used internally
     public List<com.novaflow.domain.model.feedback.UserSelection> findRecentByUserId(UserId userId, int limit) {
         List<UserSelectionPO> userSelectionPOList = userSelectionMapper.selectRecentByUserId(
                 Long.parseLong(userId.getValue()),
@@ -94,8 +97,6 @@ public class UserSelectionRepositoryImpl implements UserSelectionRepository {
                 Long.parseLong(recommendationId.getValue())
         ) != null;
     }
-
-    @Override
 
     @Override
     public long countByUserId(UserId userId) {
@@ -128,7 +129,7 @@ public class UserSelectionRepositoryImpl implements UserSelectionRepository {
     @Override
     public List<com.novaflow.domain.model.feedback.UserSelection> findAll() {
         // 默认返回前100条
-        return userSelectionMapper.selectRecentByUserId(0, 100).stream()
+        return userSelectionMapper.selectRecentByUserId(0L, 100).stream()
                 .map(this::toDomain)
                 .toList();
     }

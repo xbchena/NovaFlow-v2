@@ -3,6 +3,8 @@ package com.novaflow.infrastructure.messaging.event;
 import com.novaflow.domain.event.DomainEvent;
 import com.novaflow.domain.repository.DomainEventPublisher;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class SpringDomainEventPublisher implements DomainEventPublisher {
+
+    private static final Logger log = LoggerFactory.getLogger(SpringDomainEventPublisher.class);
 
     private final ApplicationEventPublisher applicationEventPublisher;
 

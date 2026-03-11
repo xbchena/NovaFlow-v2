@@ -3,6 +3,8 @@ package com.novaflow.infrastructure.external.wechat;
 import com.novaflow.infrastructure.config.WeChatConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -13,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class WeChatAuthServiceImpl implements WeChatAuthService {
+
+    private static final Logger log = LoggerFactory.getLogger(WeChatAuthServiceImpl.class);
 
     private final WeChatConfig weChatConfig;
     private final RestTemplate restTemplate;

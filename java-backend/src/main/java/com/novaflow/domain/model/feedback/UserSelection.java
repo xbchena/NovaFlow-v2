@@ -226,4 +226,47 @@ public class UserSelection extends AggregateRoot {
         selection.deleted = deleted;
         return selection;
     }
+
+    /**
+     * 获取选择ID (Lombok 风格)
+     */
+    public SelectionId getSelectionId() {
+        return selectionId;
+    }
+
+    /**
+     * 获取推荐ID (Lombok 风格)
+     */
+    public RecommendationId getRecommendationId() {
+        return recommendationId;
+    }
+
+    /**
+     * 获取选择项 (Lombok 风格)
+     */
+    public SelectedItem getSelectedItem() {
+        return selectedItem;
+    }
+
+    /**
+     * 获取反馈 (Lombok 风格)
+     */
+    public Feedback getFeedback() {
+        return feedback;
+    }
+
+    /**
+     * 获取用户ID (Lombok 风格)
+     */
+    public UserId getUserId() {
+        return userId;
+    }
+
+    /**
+     * 获取创建时间 (Lombok 风格)
+     */
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }
+

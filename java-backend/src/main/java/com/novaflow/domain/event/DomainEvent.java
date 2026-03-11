@@ -24,4 +24,11 @@ public abstract class DomainEvent {
      * 获取聚合根ID，用于事件溯源和关联
      */
     public abstract String getAggregateId();
+
+    /**
+     * 获取事件类型
+     */
+    public String getEventType() {
+        return eventType;
+    }
 }

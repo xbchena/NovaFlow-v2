@@ -13,6 +13,8 @@ import com.novaflow.infrastructure.persistence.po.RecommendationPO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -27,6 +29,8 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class RecommendationRepositoryImpl implements RecommendationRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(RecommendationRepositoryImpl.class);
 
     private final RecommendationMapper recommendationMapper;
     private final ObjectMapper objectMapper;

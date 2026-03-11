@@ -35,6 +35,31 @@ public class VideoMetadata implements ValueObject {
         this.thumbnailUrl = thumbnailUrl;
     }
 
+    // Explicit getters for Lombok compatibility
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
     /**
      * 创建基本的视频元数据
      */

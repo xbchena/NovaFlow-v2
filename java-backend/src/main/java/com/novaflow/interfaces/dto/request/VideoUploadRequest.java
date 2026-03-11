@@ -2,12 +2,10 @@ package com.novaflow.interfaces.dto.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 
 /**
  * 视频上传请求DTO
  */
-@Data
 public class VideoUploadRequest {
 
     /**
@@ -26,4 +24,30 @@ public class VideoUploadRequest {
      * 经度
      */
     private Double longitude;
+
+    // Getters
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    // Setters
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 }

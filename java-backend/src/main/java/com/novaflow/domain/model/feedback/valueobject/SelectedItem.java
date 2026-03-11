@@ -29,6 +29,23 @@ public class SelectedItem implements ValueObject {
         this.selectedAt = selectedAt != null ? selectedAt : LocalDateTime.now();
     }
 
+    // Explicit getters for Lombok compatibility (JavaBean convention)
+    public String getFoodName() {
+        return foodName;
+    }
+
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public LocalDateTime getSelectedAt() {
+        return selectedAt;
+    }
+
     /**
      * 创建选中项
      */

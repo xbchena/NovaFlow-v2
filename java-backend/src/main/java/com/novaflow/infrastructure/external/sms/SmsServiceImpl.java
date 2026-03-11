@@ -1,6 +1,8 @@
 package com.novaflow.infrastructure.external.sms;
 
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 public class SmsServiceImpl implements SmsService {
+
+    private static final Logger log = LoggerFactory.getLogger(SmsServiceImpl.class);
 
     private final StringRedisTemplate redisTemplate;
     private static final String CODE_PREFIX = "sms:code:";

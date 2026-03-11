@@ -56,4 +56,11 @@ public class PhoneNumber implements ValueObject {
     public String toString() {
         return getMasked();
     }
+
+    /**
+     * 获取值
+     */
+    public String getValue() {
+        return value;
+    }
 }

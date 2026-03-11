@@ -60,4 +60,86 @@ public class UserPO {
      * 是否删除
      */
     private Boolean deleted;
+
+    // 显式 getter 方法
+    public Long getId() {
+        return id;
+    }
+
+    public String getOpenid() {
+        return openid;
+    }
+
+    public String getUnionid() {
+        return unionid;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getPreferences() {
+        return preferences;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setOpenid(String openid) {
+        this.openid = openid;
+    }
+
+    public void setUnionid(String unionid) {
+        this.unionid = unionid;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setPreferences(String preferences) {
+        this.preferences = preferences;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
 }
+

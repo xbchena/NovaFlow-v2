@@ -47,4 +47,11 @@ public class RecommendationId {
     public String toString() {
         return value;
     }
+
+    /**
+     * 获取值
+     */
+    public String getValue() {
+        return value;
+    }
 }

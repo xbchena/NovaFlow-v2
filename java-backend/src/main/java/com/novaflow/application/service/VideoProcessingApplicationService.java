@@ -20,13 +20,13 @@ import com.novaflow.interfaces.dto.response.VideoAnalysisResponse;
 import com.novaflow.interfaces.dto.response.VideoListResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 视频处理应用服务
@@ -36,6 +36,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class VideoProcessingApplicationService {
+
+    private static final Logger log = LoggerFactory.getLogger(VideoProcessingApplicationService.class);
 
     private final VideoRepository videoRepository;
     private final DomainEventPublisher eventPublisher;

@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.Date;
 @Slf4j
 @Service
 public class TokenServiceImpl implements TokenService {
+
+    private static final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
 
     @Value("${jwt.secret:novaflow-secret-key-2024}")
     private String secret;

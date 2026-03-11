@@ -1,12 +1,10 @@
 package com.novaflow.interfaces.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 
 /**
  * 选择请求DTO
  */
-@Data
 public class SelectionRequest {
 
     /**
@@ -30,4 +28,38 @@ public class SelectionRequest {
      * 反馈类型：positive, neutral, negative
      */
     private String feedback;
+
+    // Getters
+    public String getRecommendationId() {
+        return recommendationId;
+    }
+
+    public String getSelectedFood() {
+        return selectedFood;
+    }
+
+    public String getSelectedPlace() {
+        return selectedPlace;
+    }
+
+    public String getFeedback() {
+        return feedback;
+    }
+
+    // Setters
+    public void setRecommendationId(String recommendationId) {
+        this.recommendationId = recommendationId;
+    }
+
+    public void setSelectedFood(String selectedFood) {
+        this.selectedFood = selectedFood;
+    }
+
+    public void setSelectedPlace(String selectedPlace) {
+        this.selectedPlace = selectedPlace;
+    }
+
+    public void setFeedback(String feedback) {
+        this.feedback = feedback;
+    }
 }

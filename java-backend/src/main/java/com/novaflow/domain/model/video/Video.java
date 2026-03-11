@@ -222,6 +222,62 @@ public class Video extends AggregateRoot {
     }
 
     /**
+     * 获取视频ID (Lombok 风格)
+     */
+    public VideoId getVideoId() {
+        return videoId;
+    }
+
+    /**
+     * 获取用户ID (Lombok 风格)
+     */
+    public UserId getUserId() {
+        return userId;
+    }
+
+    /**
+     * 获取状态 (Lombok 风格)
+     */
+    public VideoStatus getStatus() {
+        return status;
+    }
+
+    /**
+     * 获取元数据 (Lombok 风格)
+     */
+    public VideoMetadata getMetadata() {
+        return metadata;
+    }
+
+    /**
+     * 获取位置信息 (Lombok 风格)
+     */
+    public Location getLocation() {
+        return location;
+    }
+
+    /**
+     * 获取存储信息 (Lombok 风格)
+     */
+    public OSSStorageInfo getStorageInfo() {
+        return storageInfo;
+    }
+
+    /**
+     * 获取创建时间 (Lombok 风格)
+     */
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * 获取更新时间 (Lombok 风格)
+     */
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
      * 从数据库重建Video聚合根
      */
     public static Video reconstruct(
