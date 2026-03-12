@@ -1,6 +1,5 @@
 package com.novaflow.infrastructure.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Component;
  * 雪花算法ID生成器
  * 生成分布式唯一ID，适用于分库分表场景
  */
-@Slf4j
 @Component
 public class SnowflakeIdGenerator {
 

@@ -12,7 +12,6 @@ import com.novaflow.infrastructure.persistence.mapper.RecommendationMapper;
 import com.novaflow.infrastructure.persistence.po.RecommendationPO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -25,7 +24,6 @@ import java.util.Optional;
  * 推荐仓储实现
  * 使用 MyBatis XML 方式操作数据库
  */
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class RecommendationRepositoryImpl implements RecommendationRepository {

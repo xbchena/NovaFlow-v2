@@ -2,7 +2,6 @@ package com.novaflow.infrastructure.messaging.event;
 
 import com.novaflow.domain.event.DomainEvent;
 import com.novaflow.domain.repository.DomainEventPublisher;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
  * 基于Spring的领域事件发布器实现
  * 使用Spring的ApplicationEventPublisher发布领域事件
  */
-@Slf4j
 @Component
 public class SpringDomainEventPublisher implements DomainEventPublisher {
 

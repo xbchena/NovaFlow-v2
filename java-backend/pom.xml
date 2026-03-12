@@ -28,6 +28,7 @@
         <aliyun-oss.version>3.18.1</aliyun-oss.version>
         <fastjson.version>2.0.50</fastjson.version>
         <shardingsphere.version>5.1.2</shardingsphere.version>
+        <wxjava.version>4.8.1.B</wxjava.version>
     </properties>
 
     <dependencies>
@@ -122,6 +123,20 @@
             <groupId>com.alibaba.fastjson2</groupId>
             <artifactId>fastjson2</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+
+        <!-- WxJava Miniapp SDK -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>${wxjava.version}</version>
+        </dependency>
+
+        <!-- WxJava Miniapp Spring Boot Starter -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>wx-java-miniapp-spring-boot-starter</artifactId>
+            <version>${wxjava.version}</version>
         </dependency>
 
         <!-- HTTP Client -->

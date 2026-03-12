@@ -1,6 +1,5 @@
 package com.novaflow.infrastructure.external.sms;
 
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -12,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 短信服务实现
  */
-@Slf4j
 @Service
 public class SmsServiceImpl implements SmsService {
 

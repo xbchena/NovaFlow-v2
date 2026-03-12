@@ -16,7 +16,6 @@ import com.novaflow.domain.repository.RecommendationRepository;
 import com.novaflow.domain.repository.UserSelectionRepository;
 import com.novaflow.infrastructure.security.TokenService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ import java.util.List;
  * 用户反馈应用服务
  * 协调用户选择和反馈收集的用例编排
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserFeedbackApplicationService {

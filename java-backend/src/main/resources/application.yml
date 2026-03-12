@@ -105,6 +105,26 @@ app:
     app-secret: your-wechat-app-secret
     redirect-uri: https://api.novaflow.com/api/v1/auth/wechat/callback
 
+# WxJava 小程序配置
+wx:
+  miniapp:
+    # 多小程序配置
+    apps:
+      default:
+        app-id: ${app.wechat.app-id}
+        app-secret: ${app.wechat.app-secret}
+        token: ${app.wechat.token:}
+        aes-key: ${app.wechat.aes-key:}
+        # 配置存储类型（可选：memory, redis, redisson等）
+    # 配置存储类型
+    config-storage:
+      type: memory
+      http-client-type: http_components
+    # HTTP客户端超时配置
+    http-client:
+      connection-timeout: 5000
+      read-timeout: 10000
+
   # 阿里云 OSS 配置
   aliyun:
     oss:

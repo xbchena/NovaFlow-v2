@@ -19,7 +19,6 @@ import com.novaflow.interfaces.dto.request.VideoUploadRequest;
 import com.novaflow.interfaces.dto.response.VideoAnalysisResponse;
 import com.novaflow.interfaces.dto.response.VideoListResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,6 @@ import java.util.List;
  * 视频处理应用服务
  * 协调视频上传、处理和分析的用例编排
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class VideoProcessingApplicationService {

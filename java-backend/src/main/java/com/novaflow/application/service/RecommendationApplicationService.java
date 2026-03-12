@@ -27,7 +27,6 @@ import com.novaflow.interfaces.dto.request.SelectionRequest;
 import com.novaflow.interfaces.dto.response.RecommendationDetailResponse;
 import com.novaflow.interfaces.dto.response.RecommendationHistoryResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,6 @@ import java.util.List;
  * 推荐应用服务
  * 协调推荐生成、历史管理和用户反馈的用例编排
  */
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RecommendationApplicationService {

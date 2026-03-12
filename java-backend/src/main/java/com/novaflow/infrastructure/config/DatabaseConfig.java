@@ -3,7 +3,6 @@ package com.novaflow.infrastructure.config;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
  * 数据库配置类
  * 配置MyBatis Plus、分页和分库分表支持
  */
-@Slf4j
 @Configuration
 public class DatabaseConfig {
 

@@ -1,6 +1,5 @@
 package com.novaflow.infrastructure.async;
 
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
@@ -19,7 +18,6 @@ import java.util.concurrent.ThreadFactory;
  * 异步配置类
  * 使用 JDK 21 虚拟线程提升并发性能
  */
-@Slf4j
 @Configuration
 @EnableAsync
 public class AsyncConfig implements AsyncConfigurer {
