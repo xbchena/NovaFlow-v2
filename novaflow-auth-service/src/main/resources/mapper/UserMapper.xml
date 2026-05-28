@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.novaflow.auth.infra.persistence.mapper.UserMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.novaflow.auth.infra.persistence.po.UserPO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="openid" property="openid" jdbcType="VARCHAR"/>
+        <result column="unionid" property="unionid" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="avatar" property="avatar" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="preferences" property="preferences" jdbcType="VARCHAR"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, openid, unionid, nickname, avatar, phone, preferences,
+        created_at, updated_at, deleted
+    </sql>
+
+    <!-- 根据ID查询用户 -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE id = #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 根据OpenID查询用户 -->
+    <select id="selectByOpenID" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE openid = #{openid}
+        AND deleted = 0
+        LIMIT 1
+    </select>
+
+    <!-- 根据手机号查询用户 -->
+    <select id="selectByPhone" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE phone = #{phone}
+        AND deleted = 0
+        LIMIT 1
+    </select>
+
+    <!-- 批量查询用户 -->
+    <select id="selectByIds" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE id IN
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND deleted = 0
+    </select>
+
+    <!-- 分页查询用户 -->
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM users
+        WHERE deleted = 0
+        ORDER BY created_at DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+    <!-- 插入用户 -->
+    <insert id="insert" parameterType="com.novaflow.auth.infra.persistence.po.UserPO"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO users (
+        openid, unionid, nickname, avatar, phone, preferences,
+        created_at, updated_at, deleted
+        ) VALUES (
+        #{openid}, #{unionid}, #{nickname}, #{avatar}, #{phone}, #{preferences},
+        #{createdAt}, #{updatedAt}, #{deleted}
+        )
+    </insert>
+
+    <!-- 更新用户 -->
+    <update id="update" parameterType="com.novaflow.auth.infra.persistence.po.UserPO">
+        UPDATE users
+        <set>
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="preferences != null">preferences = #{preferences},</if>
+            <if test="unionid != null">unionid = #{unionid},</if>
+            updated_at = #{updatedAt}
+        </set>
+        WHERE id = #{id}
+        AND deleted = 0
+    </update>
+
+    <!-- 删除用户（软删除） -->
+    <update id="deleteById">
+        UPDATE users
+        SET deleted = 1,
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 检查OpenID是否存在 -->
+    <select id="countByOpenID" resultType="long">
+        SELECT COUNT(*)
+        FROM users
+        WHERE openid = #{openid}
+        AND deleted = 0
+    </select>
+
+    <!-- 检查手机号是否存在 -->
+    <select id="countByPhone" resultType="long">
+        SELECT COUNT(*)
+        FROM users
+        WHERE phone = #{phone}
+        AND deleted = 0
+    </select>
+
+    <!-- 检查手机号是否被其他用户使用 -->
+    <select id="countByPhoneAndIdNot" resultType="long">
+        SELECT COUNT(*)
+        FROM users
+        WHERE phone = #{phone}
+        AND id != #{id}
+        AND deleted = 0
+    </select>
+
+    <!-- 统计用户总数 -->
+    <select id="countTotal" resultType="long">
+        SELECT COUNT(*)
+        FROM users
+        WHERE deleted = 0
+    </select>
+
+</mapper>
