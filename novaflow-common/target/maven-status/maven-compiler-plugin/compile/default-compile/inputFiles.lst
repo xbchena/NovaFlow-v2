@@ -1,0 +1,16 @@
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/dto/Result.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/repository/DomainEventPublisher.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/exception/DomainErrorCode.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/infra/event/SpringDomainEventPublisher.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/aggregate/Entity.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/valueobject/ValueObject.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/exception/DomainException.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/valueobject/VideoId.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/valueobject/RecommendationId.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/infra/config/SnowflakeIdGenerator.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/valueobject/UserId.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/valueobject/SelectionId.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/repository/Repository.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/aggregate/AggregateRoot.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/repository/EventDispatchingRepository.java
+/Users/chenxiangbing/Developer/NovaFlow-v2/novaflow-common/src/main/java/com/novaflow/common/domain/event/DomainEvent.java
