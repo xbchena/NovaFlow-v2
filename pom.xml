@@ -93,6 +93,18 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Spring AI Alibaba (explicit version since BOM may not cover all) -->
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-starter-dashscope</artifactId>
+                <version>${spring-ai-alibaba.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud.ai</groupId>
+                <artifactId>spring-ai-alibaba-dashscope</artifactId>
+                <version>${spring-ai-alibaba.version}</version>
+            </dependency>
+
             <!-- Internal modules -->
             <dependency>
                 <groupId>com.novaflow</groupId>

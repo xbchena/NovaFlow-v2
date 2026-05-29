@@ -1,0 +1,59 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/novaflow?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      username: novaflow
+      password: novaflow123
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+  rocketmq:
+    name-server: localhost:9876
+    producer:
+      group: novaflow-video-producer-group
+      send-message-timeout: 3000
+      retry-times-when-send-failed: 2
+    topic:
+      video-processing: video-processing-topic
+    consumer-group:
+      video-upload: video-upload-consumer-group
+      video-analysis: video-analysis-consumer-group
+
+  aliyun:
+    oss:
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      access-key-id: your-access-key-id
+      access-key-secret: your-access-key-secret
+      bucket-name: novaflow-videos
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.novaflow.video.infra.persistence.po
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+logging:
+  level:
+    com.novaflow.video: debug
