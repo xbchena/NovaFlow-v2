@@ -1,0 +1,61 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/novaflow?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      username: novaflow
+      password: novaflow123
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  ai:
+    dashscope:
+      api-key: ${app.ai.tongyi.api-key}
+      chat:
+        options:
+          model: qwen-max
+          temperature: 0.7
+          max-tokens: 2000
+      image:
+        options:
+          model: qwen-vl-plus
+  rocketmq:
+    name-server: localhost:9876
+    consumer:
+      group: novaflow-recommendation-consumer-group
+    topic:
+      recommendation: recommendation-topic
+
+app:
+  ai:
+    tongyi:
+      api-key: your-tongyi-api-key
+      model: qwen-vl-max
+      base-url: https://dashscope.aliyuncs.com/api/v1
+      system-prompt: "你是一个智能饮食推荐助手，专门分析视频内容并提供饮食建议。"
+      chat:
+        memory:
+          max-messages: 50
+          ttl-hours: 24
+  amap:
+    api-key: your-amap-api-key
+    secret-key: your-amap-secret-key
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.novaflow.recommendation.infra.persistence.po
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    db-config:
+      id-type: auto
+
+logging:
+  level:
+    com.novaflow.recommendation: debug

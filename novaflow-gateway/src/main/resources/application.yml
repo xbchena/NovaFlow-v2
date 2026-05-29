@@ -1,0 +1,60 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        # Auth Service
+        - id: auth-service
+          uri: lb://novaflow-auth-service
+          predicates:
+            - Path=/api/auth/**,/api/user/**
+          filters:
+            - StripPrefix=0
+
+        # Video Service
+        - id: video-service
+          uri: lb://novaflow-video-service
+          predicates:
+            - Path=/api/video/**
+          filters:
+            - StripPrefix=0
+
+        # Recommendation Service
+        - id: recommendation-service
+          uri: lb://novaflow-recommendation-service
+          predicates:
+            - Path=/api/recommendation/**
+          filters:
+            - StripPrefix=0
+
+        # Feedback Service
+        - id: feedback-service
+          uri: lb://novaflow-feedback-service
+          predicates:
+            - Path=/api/feedback/**
+          filters:
+            - StripPrefix=0
+
+      # Global CORS
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+app:
+  jwt:
+    secret: novaflow-jwt-secret-key-change-in-production
+
+logging:
+  level:
+    com.novaflow.gateway: debug
+    org.springframework.cloud.gateway: debug
