@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.novaflow.recommendation.infra.persistence.mapper.UserProfileMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="com.novaflow.recommendation.infra.persistence.po.UserProfilePO">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="diet_preferences" property="dietPreferences" jdbcType="VARCHAR"/>
+        <result column="allergies" property="allergies" jdbcType="VARCHAR"/>
+        <result column="preferred_cuisines" property="preferredCuisines" jdbcType="VARCHAR"/>
+        <result column="preferred_price_range" property="preferredPriceRange" jdbcType="VARCHAR"/>
+        <result column="behavior_summary" property="behaviorSummary" jdbcType="VARCHAR"/>
+        <result column="total_recommendations" property="totalRecommendations" jdbcType="INTEGER"/>
+        <result column="total_clicks" property="totalClicks" jdbcType="INTEGER"/>
+        <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP"/>
+        <result column="created_at" property="createdAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, user_id, diet_preferences, allergies, preferred_cuisines, preferred_price_range,
+        behavior_summary, total_recommendations, total_clicks, updated_at, created_at
+    </sql>
+
+    <!-- 根据用户ID查询用户画像 -->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_profile
+        WHERE user_id = #{userId}
+        LIMIT 1
+    </select>
+
+    <!-- 插入用户画像 -->
+    <insert id="insert" parameterType="com.novaflow.recommendation.infra.persistence.po.UserProfilePO"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO user_profile (
+        user_id, diet_preferences, allergies, preferred_cuisines, preferred_price_range,
+        behavior_summary, total_recommendations, total_clicks, updated_at, created_at
+        ) VALUES (
+        #{userId}, #{dietPreferences}, #{allergies}, #{preferredCuisines}, #{preferredPriceRange},
+        #{behaviorSummary}, #{totalRecommendations}, #{totalClicks}, #{updatedAt}, #{createdAt}
+        )
+    </insert>
+
+    <!-- 更新用户画像 -->
+    <update id="update" parameterType="com.novaflow.recommendation.infra.persistence.po.UserProfilePO">
+        UPDATE user_profile
+        <set>
+            <if test="dietPreferences != null">diet_preferences = #{dietPreferences},</if>
+            <if test="allergies != null">allergies = #{allergies},</if>
+            <if test="preferredCuisines != null">preferred_cuisines = #{preferredCuisines},</if>
+            <if test="preferredPriceRange != null">preferred_price_range = #{preferredPriceRange},</if>
+            <if test="behaviorSummary != null">behavior_summary = #{behaviorSummary},</if>
+            <if test="totalRecommendations != null">total_recommendations = #{totalRecommendations},</if>
+            <if test="totalClicks != null">total_clicks = #{totalClicks},</if>
+            updated_at = #{updatedAt}
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+
+    <!-- 插入或更新用户画像 -->
+    <insert id="upsert" parameterType="com.novaflow.recommendation.infra.persistence.po.UserProfilePO"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO user_profile (
+        user_id, diet_preferences, allergies, preferred_cuisines, preferred_price_range,
+        behavior_summary, total_recommendations, total_clicks, updated_at, created_at
+        ) VALUES (
+        #{userId}, #{dietPreferences}, #{allergies}, #{preferredCuisines}, #{preferredPriceRange},
+        #{behaviorSummary}, #{totalRecommendations}, #{totalClicks}, #{updatedAt}, #{createdAt}
+        )
+        ON DUPLICATE KEY UPDATE
+            diet_preferences = VALUES(diet_preferences),
+            allergies = VALUES(allergies),
+            preferred_cuisines = VALUES(preferred_cuisines),
+            preferred_price_range = VALUES(preferred_price_range),
+            behavior_summary = VALUES(behavior_summary),
+            total_recommendations = VALUES(total_recommendations),
+            total_clicks = VALUES(total_clicks),
+            updated_at = VALUES(updated_at)
+    </insert>
+
+</mapper>
