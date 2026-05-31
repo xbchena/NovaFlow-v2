@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -145,26 +145,6 @@ public class ChatMemoryConfig {
 
         private String buildKey(String conversationId) {
             return KEY_PREFIX + conversationId;
-        }
-    }
-
-    /**
-     * 简单的内存聊天记忆实现
-     * 用于开发测试或简单场景
-     */
-    @Component("simpleChatMemory")
-    public static class SimpleChatMemory {
-
-        private final ChatMemory memory;
-
-        public SimpleChatMemory() {
-            this.memory = MessageWindowChatMemory.builder()
-                    .maxMessages(20)
-                    .build();
-        }
-
-        public ChatMemory getMemory() {
-            return memory;
         }
     }
 }

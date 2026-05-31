@@ -1,13 +1,12 @@
 package com.novaflow.recommendation.infra.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 /**
  * Spring AI 配置类
@@ -18,20 +17,6 @@ public class SpringAIConfig {
 
     @Value("${app.ai.tongyi.system-prompt:你是一个智能饮食推荐助手，专门分析视频内容并提供饮食建议。}")
     private String systemPrompt;
-
-    /**
-     * 创建基于滑动窗口的聊天记忆
-     * 保留最近的 20 条消息作为上下文
-     *
-     * @return ChatMemory 实例
-     */
-    @Bean
-    @Primary
-    public ChatMemory chatMemory() {
-        return MessageWindowChatMemory.builder()
-                .maxMessages(20)
-                .build();
-    }
 
     /**
      * 创建带记忆的 ChatClient
@@ -45,7 +30,7 @@ public class SpringAIConfig {
     public ChatClient chatClient(ChatModel chatModel, ChatMemory chatMemory) {
         return ChatClient.builder(chatModel)
                 .defaultSystem(systemPrompt)
-                .defaultAdvisors()
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }
 
