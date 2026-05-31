@@ -1,42 +1,56 @@
 package com.novaflow.recommendation.interfaces.rest;
 
-import com.novaflow.recommendation.infra.external.ai.VideoAnalysisServiceImpl;
+import com.novaflow.recommendation.infra.memory.SceneContextManager;
+import com.novaflow.recommendation.infra.memory.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- * 聊天控制器
- * 处理与大模型的对话交互
- */
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
 public class ChatController {
 
-    private final VideoAnalysisServiceImpl videoAnalysisService;
+    private final ChatClient chatClient;
+    private final ChatClient videoAnalysisChatClient;
+    private final ChatMemory chatMemory;
+    private final SceneContextManager sceneContextManager;
+    private final UserProfileService userProfileService;
 
     /**
-     * 发送聊天消息
-     * 支持多轮对话和上下文记忆
-     *
-     * @param request   聊天请求
-     * @return AI 响应
+     * 发送聊天消息（核心端点）
+     * 接入三层记忆：L3 用户画像 + L2 场景上下文 + L1 短期记忆（Advisor 自动管理）
      */
     @PostMapping("/message")
     public ResponseEntity<ChatResponse> sendMessage(@RequestBody ChatRequest request) {
-        log.info("接收聊天消息: sessionId={}, message={}",
-                request.getSessionId(), request.getMessage());
+        log.info("接收聊天消息: sessionId={}, userId={}, message={}",
+                request.getSessionId(), request.getUserId(), request.getMessage());
 
         try {
-            String response = videoAnalysisService.chat(
-                    request.getSessionId(),
-                    request.getMessage()
-            );
+            if (request.getVideoId() != null && !request.getVideoId().isBlank()) {
+                sceneContextManager.setCurrentScene(
+                        request.getSessionId(),
+                        SceneContextManager.SceneContext.of(request.getVideoId(), null, null, "推荐")
+                );
+            }
+
+            String contextPrompt = buildContextPrompt(request.getUserId(), request.getSessionId());
+
+            String response = chatClient.prompt()
+                    .system(contextPrompt)
+                    .user(request.getMessage())
+                    .call()
+                    .content();
 
             return ResponseEntity.ok(ChatResponse.builder()
                     .sessionId(request.getSessionId())
@@ -47,25 +61,16 @@ public class ChatController {
         } catch (Exception e) {
             log.error("处理聊天消息失败: sessionId={}, error={}",
                     request.getSessionId(), e.getMessage(), e);
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.internalServerError().body(
                     ChatResponse.builder()
                             .sessionId(request.getSessionId())
-                            .message("抱歉，处理消息时出错: " + e.getMessage())
+                            .message("抱歉，处理消息时出错，请稍后重试。")
                             .timestamp(System.currentTimeMillis())
                             .build()
             );
         }
     }
 
-    /**
-     * 分析视频帧
-     *
-     * @param image       视频帧图像
-     * @param timestamp   时间戳
-     * @param sessionId   会话ID（可选）
-     * @param context     上下文信息（可选）
-     * @return 分析结果
-     */
     @PostMapping(value = "/analyze-frame", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<FrameAnalysisResponse> analyzeFrame(
             @RequestParam("image") MultipartFile image,
@@ -76,7 +81,21 @@ public class ChatController {
         log.info("分析视频帧: sessionId={}, timestamp={}", sessionId, timestamp);
 
         try {
-            String analysis = videoAnalysisService.analyzeVideoFrame(image, timestamp, context);
+            String prompt = String.format(
+                    "请分析这个视频帧（时间戳：%s）。%s\n请描述：\n1. 场景类型\n2. 可见的食物\n3. 人物数量和状态\n4. 环境氛围",
+                    timestamp,
+                    context != null ? "上下文：" + context : ""
+            );
+
+            String analysis = videoAnalysisChatClient.prompt()
+                    .user(prompt)
+                    .call()
+                    .content();
+
+            sceneContextManager.setCurrentScene(
+                    sessionId,
+                    SceneContextManager.SceneContext.of(null, "视频帧分析", List.of())
+            );
 
             return ResponseEntity.ok(FrameAnalysisResponse.builder()
                     .sessionId(sessionId)
@@ -85,9 +104,8 @@ public class ChatController {
                     .build());
 
         } catch (Exception e) {
-            log.error("视频帧分析失败: sessionId={}, error={}",
-                    sessionId, e.getMessage(), e);
-            return ResponseEntity.badRequest().body(
+            log.error("视频帧分析失败: sessionId={}, error={}", sessionId, e.getMessage(), e);
+            return ResponseEntity.internalServerError().body(
                     FrameAnalysisResponse.builder()
                             .sessionId(sessionId)
                             .timestamp(timestamp)
@@ -97,46 +115,70 @@ public class ChatController {
         }
     }
 
-    /**
-     * 清除会话历史
-     *
-     * @param sessionId 会话ID
-     * @return 操作结果
-     */
     @DeleteMapping("/session/{sessionId}")
     public ResponseEntity<Void> clearSession(@PathVariable String sessionId) {
         log.info("清除会话历史: sessionId={}", sessionId);
-        videoAnalysisService.clearSessionHistory(sessionId);
+        chatMemory.clear(sessionId);
+        sceneContextManager.clearScene(sessionId);
         return ResponseEntity.ok().build();
     }
 
-    /**
-     * 聊天请求
-     */
+    @GetMapping("/scene/{sessionId}")
+    public ResponseEntity<Map<String, Object>> getScene(@PathVariable String sessionId) {
+        var sceneOpt = sceneContextManager.getCurrentScene(sessionId);
+        Map<String, Object> result = sceneOpt
+                .map(scene -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("sessionId", sessionId);
+                    map.put("videoId", scene.videoId());
+                    map.put("sceneType", scene.sceneType());
+                    map.put("detectedFood", scene.detectedFood());
+                    map.put("userIntent", scene.userIntent());
+                    map.put("createdAt", scene.createdAt());
+                    return map;
+                })
+                .orElseGet(() -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("sessionId", sessionId);
+                    map.put("active", false);
+                    return map;
+                });
+        return ResponseEntity.ok(result);
+    }
+
+    private String buildContextPrompt(Long userId, String sessionId) {
+        StringBuilder prompt = new StringBuilder();
+        if (userId != null) {
+            String profilePrompt = userProfileService.buildProfilePrompt(userId);
+            if (!profilePrompt.isEmpty()) {
+                prompt.append(profilePrompt).append("\n");
+            }
+        }
+        String scenePrompt = sceneContextManager.buildScenePrompt(sessionId);
+        if (!scenePrompt.isEmpty()) {
+            prompt.append(scenePrompt).append("\n");
+        }
+        return prompt.toString();
+    }
+
+    // ---- DTO ----
+
     public static class ChatRequest {
         private String sessionId = "default";
         private String message;
+        private Long userId;
+        private String videoId;
 
-        public String getSessionId() {
-            return sessionId;
-        }
-
-        public void setSessionId(String sessionId) {
-            this.sessionId = sessionId;
-        }
-
-        public String getMessage() {
-            return message;
-        }
-
-        public void setMessage(String message) {
-            this.message = message;
-        }
+        public String getSessionId() { return sessionId; }
+        public void setSessionId(String sessionId) { this.sessionId = sessionId; }
+        public String getMessage() { return message; }
+        public void setMessage(String message) { this.message = message; }
+        public Long getUserId() { return userId; }
+        public void setUserId(Long userId) { this.userId = userId; }
+        public String getVideoId() { return videoId; }
+        public void setVideoId(String videoId) { this.videoId = videoId; }
     }
 
-    /**
-     * 聊天响应
-     */
     @lombok.Builder
     @lombok.Data
     public static class ChatResponse {
@@ -145,9 +187,6 @@ public class ChatController {
         private Long timestamp;
     }
 
-    /**
-     * 视频帧分析响应
-     */
     @lombok.Builder
     @lombok.Data
     public static class FrameAnalysisResponse {
