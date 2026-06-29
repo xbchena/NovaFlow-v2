@@ -1,7 +1,6 @@
 package com.novaflow.gateway.config;
 
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
-import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.core.publisher.Mono;
@@ -24,10 +23,5 @@ public class RateLimiterConfig {
                     : "unknown";
             return Mono.just("ip:" + ip);
         };
-    }
-
-    @Bean
-    public RedisRateLimiter defaultRedisRateLimiter() {
-        return new RedisRateLimiter(10, 20, 1);
     }
 }

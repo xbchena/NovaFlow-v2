@@ -8,4 +8,8 @@ spring:
       discovery:
         enabled: false
         register-enabled: false
+      config:
+        enabled: false
+        import-check:
+          enabled: false
 
