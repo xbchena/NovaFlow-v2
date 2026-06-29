@@ -35,7 +35,7 @@ mybatis-plus:
 
 app:
   jwt:
-    secret: novaflow-jwt-secret-key-change-in-production
+    secret: ${NOVAFLOW_JWT_SECRET:novaflow-jwt-secret-change-me-please-256bit-key}
     expiration: 604800000
     refresh-expiration: 2592000000
   wechat:
