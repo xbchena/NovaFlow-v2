@@ -13,7 +13,11 @@ import reactor.core.publisher.Mono;
 @Component
 public class GatewayErrorWriter {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
+
+    public GatewayErrorWriter(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     public Mono<Void> write(ServerHttpResponse response, HttpStatus status, String message) {
         response.setStatusCode(status);

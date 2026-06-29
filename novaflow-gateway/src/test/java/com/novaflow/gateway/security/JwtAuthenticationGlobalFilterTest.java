@@ -1,5 +1,6 @@
 package com.novaflow.gateway.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.novaflow.gateway.config.GatewayProperties;
 import com.novaflow.gateway.error.GatewayErrorWriter;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +38,7 @@ class JwtAuthenticationGlobalFilterTest {
         properties.setJwtSecret(SECRET);
         properties.setWhitelist(List.of("/api/v1/auth/wechat/callback"));
         properties.setBlacklistPrefix("auth:blacklist");
-        errorWriter = new GatewayErrorWriter();
+        errorWriter = new GatewayErrorWriter(new ObjectMapper());
         filter = new JwtAuthenticationGlobalFilter(provider, redis, properties, errorWriter);
     }
 
