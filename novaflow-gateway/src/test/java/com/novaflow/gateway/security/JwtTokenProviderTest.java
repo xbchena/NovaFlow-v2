@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class JwtTokenProviderTest {
 
@@ -44,6 +45,12 @@ class JwtTokenProviderTest {
         JwtTokenProvider other = new JwtTokenProvider("another-secret-key-also-long-enough-256bit!!!");
         String token = tokenFor("user-123", 60_000);
         assertThat(other.parseAndValidate(token)).isNull();
+    }
+
+    @Test
+    void constructor_rejectsShortSecret() {
+        assertThatThrownBy(() -> new JwtTokenProvider("short"))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     private String tokenFor(String subject, long ttlMillis) {
