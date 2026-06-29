@@ -10,12 +10,10 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * 配置加载冒烟测试：确保 application.yml 的 gateway.* 正确绑定，且关键 Bean 装配成功。
- *
- * <p>使用 test profile（见 src/test/resources/application-test.yml）：
- * 全量上下文启动时，Spring Cloud Gateway 的内置 {@code gatewayProperties} bean 会与本项目
- * {@code @Component GatewayProperties} 同名冲突，且 Nacos 服务发现会尝试连接本地 Nacos。
- * test profile 开启 bean 覆盖并禁用 Nacos 注册，使测试在无外部依赖时也能加载上下文。
+ * 配置加载冒烟测试：确保 application.yml 的 gateway.* 正确绑定到 GatewayProperties，
+ * 且关键 Bean（JwtAuthenticationGlobalFilter、RateLimiterConfig 等）能被装配。
+ * GatewayProperties 用显式 bean 名 novaflowGatewayProperties 以避免与 SCG 内置
+ * GatewayProperties 同名冲突。
  */
 @SpringBootTest
 @ActiveProfiles("test")

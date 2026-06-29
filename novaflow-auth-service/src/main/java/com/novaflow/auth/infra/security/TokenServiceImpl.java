@@ -21,8 +21,8 @@ public class TokenServiceImpl implements TokenService {
 
     private static final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
 
-    // 与 novaflow-gateway 共享同一 secret（HS256 要求 >= 32 字节）
-    @Value("${NOVAFLOW_JWT_SECRET:novaflow-jwt-secret-change-me-please-256bit-key}")
+    // 与 novaflow-gateway 共享同一 secret（HS256 要求 >= 32 字节）；yml app.jwt.secret 覆盖到 NOVAFLOW_JWT_SECRET
+    @Value("${app.jwt.secret}")
     private String secret;
 
     @Value("${jwt.access-token-expiration:3600}") // 1小时
