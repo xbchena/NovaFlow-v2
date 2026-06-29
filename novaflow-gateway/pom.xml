@@ -16,6 +16,12 @@
     <description>API 网关 - 路由、JWT 鉴权、限流</description>
 
     <dependencies>
+        <!-- NovaFlow common DTO (Result, etc.) -->
+        <dependency>
+            <groupId>com.novaflow</groupId>
+            <artifactId>novaflow-common</artifactId>
+        </dependency>
+
         <!-- Spring Cloud Gateway (WebFlux-based) -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
