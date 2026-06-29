@@ -26,6 +26,11 @@ spring:
             - Path=/api/v1/recommendations/**,/api/v1/chat/**,/api/v1/profile/**,/api/v1/locations/**
           filters:
             - StripPrefix=0
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 10
+                key-resolver: "#{@userKeyResolver}"
         # Feedback Service
         - id: feedback-service
           uri: lb://novaflow-feedback-service

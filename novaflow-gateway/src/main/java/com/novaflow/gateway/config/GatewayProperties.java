@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 网关层可配置项：JWT secret、白名单路径、黑名单 Redis key 前缀。
  */
-@Component
+@Component("novaflowGatewayProperties")
 @ConfigurationProperties(prefix = "gateway")
 public class GatewayProperties {
 

@@ -1,0 +1,11 @@
+# Test profile: lets the full @SpringBootTest context load without a live
+# Nacos/Redis. Disables Nacos service-discovery auto-registration so the
+# context does not block trying to reach a Nacos server. Redis (Lettuce)
+# connects lazily, so the context starts even without a live Redis.
+spring:
+  cloud:
+    nacos:
+      discovery:
+        enabled: false
+        register-enabled: false
+
