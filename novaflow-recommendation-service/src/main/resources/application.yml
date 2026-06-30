@@ -24,18 +24,15 @@ spring:
       image:
         options:
           model: qwen-vl-plus
-  rocketmq:
-    name-server: localhost:9876
-    consumer:
-      group: novaflow-recommendation-consumer-group
-    topic:
-      recommendation: recommendation-topic
-
 app:
   ai:
     agent:
       name: DietAdvisor
       max-iterations: 10
+    chat:
+      memory:
+        max-messages: 50
+        ttl-hours: 24
     tongyi:
       api-key: your-tongyi-api-key
       model: qwen-vl-max
@@ -48,6 +45,19 @@ app:
   amap:
     api-key: your-amap-api-key
     secret-key: your-amap-secret-key
+
+rocketmq:
+  name-server: localhost:9876
+  producer:
+    group: novaflow-recommendation-producer-group
+  consumer:
+    group: novaflow-recommendation-consumer-group
+  topic:
+    video-processing: video-processing-topic
+    recommendation: recommendation-topic
+  consumer-group:
+    video-analysis: video-analysis-consumer-group
+    recommendation: recommendation-consumer-group
 
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml

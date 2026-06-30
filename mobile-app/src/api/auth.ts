@@ -1,8 +1,7 @@
 import { apiClient } from './client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { openURL } from 'expo-linking';
-import { WebBrowser } from 'expo-web-browser';
-import * as AuthSession from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 
 export interface User {
   id: string;
@@ -40,7 +39,9 @@ export class AuthService {
       // const result = await WeChat.sendAuthRequest('snsapi_userinfo');
 
       // 方式2: 使用 WebView + 微信开放平台
-      const authUrl = `https://open.weixin.qq.com/connect/qrconnect?appid=${process.env.WECHAT_APP_ID}&redirect_uri=${encodeURIComponent('https://api.novaflow.com/api/v1/auth/wechat/callback')}&response_type=code&scope=snsapi_userinfo#wechat_redirect`;
+      const wechatAppId = Constants.expoConfig?.extra?.wechatAppId ?? '';
+      const apiBaseUrl = Constants.expoConfig?.extra?.apiBaseUrl ?? 'https://api.novaflow.com/api/v1';
+      const authUrl = `https://open.weixin.qq.com/connect/qrconnect?appid=${wechatAppId}&redirect_uri=${encodeURIComponent(`${apiBaseUrl}/auth/wechat/callback`)}&response_type=code&scope=snsapi_userinfo#wechat_redirect`;
 
       // 打开浏览器进行微信授权
       const result = await WebBrowser.openAuthSessionAsync(
@@ -70,7 +71,11 @@ export class AuthService {
    */
   private async handleWeChatCallback(code: string): Promise<WeChatAuthResult> {
     try {
-      const response = await apiClient.post('/auth/wechat/callback', { code });
+      const response = await apiClient.post<{
+        token: string;
+        refreshToken?: string;
+        user?: User;
+      }>('/auth/wechat/callback', { code });
 
       if (response.success && response.data) {
         const { token, refreshToken, user } = response.data;
@@ -78,8 +83,8 @@ export class AuthService {
         // 存储认证信息
         await AsyncStorage.multiSet([
           [this.STORAGE_KEYS.TOKEN, token],
-          [this.STORAGE_KEYS.REFRESH_TOKEN, refreshToken],
-          [this.STORAGE_KEYS.USER_INFO, JSON.stringify(user)],
+          [this.STORAGE_KEYS.REFRESH_TOKEN, refreshToken ?? ''],
+          [this.STORAGE_KEYS.USER_INFO, JSON.stringify(user ?? {})],
         ]);
 
         return {
@@ -102,15 +107,19 @@ export class AuthService {
    */
   async loginWithPhone(phone: string, code: string): Promise<WeChatAuthResult> {
     try {
-      const response = await apiClient.post('/auth/phone/login', { phone, code });
+      const response = await apiClient.post<{
+        token: string;
+        refreshToken?: string;
+        user?: User;
+      }>('/auth/phone/login', { phone, code });
 
       if (response.success && response.data) {
         const { token, refreshToken, user } = response.data;
 
         await AsyncStorage.multiSet([
           [this.STORAGE_KEYS.TOKEN, token],
-          [this.STORAGE_KEYS.REFRESH_TOKEN, refreshToken],
-          [this.STORAGE_KEYS.USER_INFO, JSON.stringify(user)],
+          [this.STORAGE_KEYS.REFRESH_TOKEN, refreshToken ?? ''],
+          [this.STORAGE_KEYS.USER_INFO, JSON.stringify(user ?? {})],
         ]);
 
         return {
@@ -185,7 +194,10 @@ export class AuthService {
       const refreshToken = await AsyncStorage.getItem(this.STORAGE_KEYS.REFRESH_TOKEN);
       if (!refreshToken) return false;
 
-      const response = await apiClient.post('/auth/refresh', { refreshToken });
+      const response = await apiClient.post<{
+        token: string;
+        refreshToken?: string;
+      }>('/auth/refresh', { refreshToken });
 
       if (response.success && response.data) {
         await AsyncStorage.setItem(this.STORAGE_KEYS.TOKEN, response.data.token);

@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -31,6 +33,14 @@ public class ChatMemoryConfig {
     @Value("${app.ai.chat.memory.ttl-hours:24}")
     private int ttlHours;
 
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, Object> template = new RedisTemplate<>();
+        template.setConnectionFactory(connectionFactory);
+        template.afterPropertiesSet();
+        return template;
+    }
+
     /**
      * 创建基于滑动窗口的聊天记忆
      */
@@ -44,7 +54,6 @@ public class ChatMemoryConfig {
      * 基于 Redis 的聊天记忆实现
      * 支持多会话管理和持久化存储
      */
-    @Component
     public static class RedisBackedChatMemory implements ChatMemory {
 
         private final RedisTemplate<String, Object> redisTemplate;
@@ -68,7 +77,7 @@ public class ChatMemoryConfig {
             String key = buildKey(conversationId);
 
             // 获取现有消息
-            List<org.springframework.ai.chat.messages.Message> existingMessages = get(conversationId);
+            List<org.springframework.ai.chat.messages.Message> existingMessages = new ArrayList<>(get(conversationId));
 
             // 添加新消息
             existingMessages.addAll(messages);
@@ -130,7 +139,10 @@ public class ChatMemoryConfig {
          * 清除所有聊天记录
          */
         public void clearAll() {
-            redisTemplate.delete(redisTemplate.keys(KEY_PREFIX + "*"));
+            Set<String> keys = redisTemplate.keys(KEY_PREFIX + "*");
+            if (keys != null && !keys.isEmpty()) {
+                redisTemplate.delete(keys);
+            }
             memoryCache.clear();
             log.debug("清除所有聊天记录");
         }
@@ -139,8 +151,8 @@ public class ChatMemoryConfig {
          * 获取会话数量
          */
         public long getConversationCount() {
-            Long count = (long) redisTemplate.keys(KEY_PREFIX + "*").size();
-            return count != null ? count : 0;
+            Set<String> keys = redisTemplate.keys(KEY_PREFIX + "*");
+            return keys != null ? keys.size() : 0;
         }
 
         private String buildKey(String conversationId) {

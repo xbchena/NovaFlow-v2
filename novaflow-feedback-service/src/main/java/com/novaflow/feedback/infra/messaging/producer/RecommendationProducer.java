@@ -44,8 +44,8 @@ public class RecommendationProducer {
 
             Message msg = new Message(
                     topic,
-                    "recommendation", // tag
-                    "recommendation-" + recommendationId, // key
+                    "recommendation",
+                    "recommendation-" + recommendationId,
                     messageBody.getBytes(StandardCharsets.UTF_8)
             );
 

@@ -41,8 +41,8 @@ public class VideoProcessingProducer {
 
             Message msg = new Message(
                     topic,
-                    "video-upload", // tag
-                    "video-upload-" + videoId, // key
+                    "video-upload",
+                    "video-upload-" + videoId,
                     messageBody.getBytes(StandardCharsets.UTF_8)
             );
 
@@ -68,8 +68,8 @@ public class VideoProcessingProducer {
 
             Message msg = new Message(
                     topic,
-                    "video-analysis", // tag
-                    "video-analysis-" + videoId, // key
+                    "video-analysis",
+                    "video-analysis-" + videoId,
                     messageBody.getBytes(StandardCharsets.UTF_8)
             );
 

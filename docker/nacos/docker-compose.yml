@@ -1,8 +1,26 @@
-version: "3.8"
-
 services:
+  mysql:
+    image: mysql:8.4
+    container_name: novaflow-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root123456
+      - MYSQL_DATABASE=novaflow
+      - MYSQL_USER=novaflow
+      - MYSQL_PASSWORD=novaflow123
+      - TZ=Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - novaflow-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   nacos:
     image: nacos/nacos-server:v2.3.2
+    platform: linux/amd64
     container_name: novaflow-nacos
     environment:
       - MODE=standalone
@@ -26,3 +44,41 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
+
+  rocketmq-namesrv:
+    image: apache/rocketmq:4.9.7
+    platform: linux/amd64
+    container_name: novaflow-rocketmq-namesrv
+    command: /home/rocketmq/rocketmq-4.9.7/bin/mqnamesrv
+    ports:
+      - "9876:9876"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -ec ': >/dev/tcp/127.0.0.1/9876'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  rocketmq-broker:
+    image: apache/rocketmq:4.9.7
+    platform: linux/amd64
+    container_name: novaflow-rocketmq-broker
+    depends_on:
+      rocketmq-namesrv:
+        condition: service_healthy
+    environment:
+      - NAMESRV_ADDR=rocketmq-namesrv:9876
+      - JAVA_OPT_EXT=-server -Xms256m -Xmx256m
+    command: /home/rocketmq/rocketmq-4.9.7/bin/mqbroker -n rocketmq-namesrv:9876 -c /home/rocketmq/conf/broker.conf
+    ports:
+      - "10909:10909"
+      - "10911:10911"
+    volumes:
+      - ../rocketmq/broker.conf:/home/rocketmq/conf/broker.conf:ro
+    healthcheck:
+      test: ["CMD-SHELL", "bash -ec ': >/dev/tcp/127.0.0.1/10911'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  novaflow-mysql-data:

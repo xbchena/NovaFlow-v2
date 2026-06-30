@@ -1,4 +1,5 @@
 import { apiClient } from './client';
+import { ApiResult } from './types';
 import * as Location from 'expo-location';
 
 export interface NearbyPlace {
@@ -50,8 +51,11 @@ export class LocationService {
     category?: 'market' | 'restaurant' | 'cafeteria';
   }): Promise<{ success: boolean; data?: NearbyPlace[] }> {
     try {
-      const response = await apiClient.get('/locations/nearby', params);
-      return response;
+      const response = await apiClient.get<NearbyPlace[]>('/locations/nearby', params);
+      return {
+        success: response.success,
+        data: response.data,
+      };
     } catch {
       return { success: false };
     }

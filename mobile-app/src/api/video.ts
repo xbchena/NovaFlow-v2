@@ -61,7 +61,11 @@ export class VideoService {
       }
 
       // 上传
-      const response = await apiClient.upload('/videos/upload', formData, onProgress);
+      const response = await apiClient.upload<{ videoId?: string }>(
+        '/videos/upload',
+        formData,
+        onProgress
+      );
 
       return {
         success: response.success,
@@ -81,12 +85,18 @@ export class VideoService {
    */
   async getAnalysisResult(videoId: string): Promise<VideoAnalysisResult> {
     try {
-      const response = await apiClient.get(`/videos/${videoId}/analysis`);
-      return response;
-    } catch (error) {
+      const response = await apiClient.get<VideoAnalysisResult['data']>(
+        `/videos/${videoId}/analysis`
+      );
+      return {
+        success: response.success,
+        data: response.data,
+        message: response.message,
+      };
+    } catch (error: any) {
       return {
         success: false,
-        message: '获取分析结果失败',
+        message: error?.message || '获取分析结果失败',
       };
     }
   }

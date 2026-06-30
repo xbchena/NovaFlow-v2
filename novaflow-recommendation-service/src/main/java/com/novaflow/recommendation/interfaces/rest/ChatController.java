@@ -21,6 +21,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChatController {
 
+    private static final String CHAT_MEMORY_CONVERSATION_ID = "chat_memory_conversation_id";
+
     private final ChatClient chatClient;
     private final ChatClient videoAnalysisChatClient;
     private final ChatMemory chatMemory;
@@ -33,37 +35,47 @@ public class ChatController {
      */
     @PostMapping("/message")
     public ResponseEntity<ChatResponse> sendMessage(@RequestBody ChatRequest request) {
+        if (request == null || request.getMessage() == null || request.getMessage().isBlank()) {
+            return ResponseEntity.badRequest().body(ChatResponse.builder()
+                    .sessionId("default")
+                    .message("消息不能为空")
+                    .timestamp(System.currentTimeMillis())
+                    .build());
+        }
+
+        String sessionId = normalizeSessionId(request.getSessionId());
         log.info("接收聊天消息: sessionId={}, userId={}, message={}",
-                request.getSessionId(), request.getUserId(), request.getMessage());
+                sessionId, request.getUserId(), request.getMessage());
 
         try {
             if (request.getVideoId() != null && !request.getVideoId().isBlank()) {
                 sceneContextManager.setCurrentScene(
-                        request.getSessionId(),
+                        sessionId,
                         SceneContextManager.SceneContext.of(request.getVideoId(), null, null, "推荐")
                 );
             }
 
-            String contextPrompt = buildContextPrompt(request.getUserId(), request.getSessionId());
+            String contextPrompt = buildContextPrompt(request.getUserId(), sessionId);
 
             String response = chatClient.prompt()
+                    .advisors(advisor -> advisor.param(CHAT_MEMORY_CONVERSATION_ID, sessionId))
                     .system(contextPrompt)
                     .user(request.getMessage())
                     .call()
                     .content();
 
             return ResponseEntity.ok(ChatResponse.builder()
-                    .sessionId(request.getSessionId())
+                    .sessionId(sessionId)
                     .message(response)
                     .timestamp(System.currentTimeMillis())
                     .build());
 
         } catch (Exception e) {
             log.error("处理聊天消息失败: sessionId={}, error={}",
-                    request.getSessionId(), e.getMessage(), e);
+                    sessionId, e.getMessage(), e);
             return ResponseEntity.internalServerError().body(
                     ChatResponse.builder()
-                            .sessionId(request.getSessionId())
+                            .sessionId(sessionId)
                             .message("抱歉，处理消息时出错，请稍后重试。")
                             .timestamp(System.currentTimeMillis())
                             .build()
@@ -79,6 +91,7 @@ public class ChatController {
             @RequestParam(value = "context", required = false) String context) {
 
         log.info("分析视频帧: sessionId={}, timestamp={}", sessionId, timestamp);
+        sessionId = normalizeSessionId(sessionId);
 
         try {
             String prompt = String.format(
@@ -117,6 +130,7 @@ public class ChatController {
 
     @DeleteMapping("/session/{sessionId}")
     public ResponseEntity<Void> clearSession(@PathVariable String sessionId) {
+        sessionId = normalizeSessionId(sessionId);
         log.info("清除会话历史: sessionId={}", sessionId);
         chatMemory.clear(sessionId);
         sceneContextManager.clearScene(sessionId);
@@ -125,11 +139,12 @@ public class ChatController {
 
     @GetMapping("/scene/{sessionId}")
     public ResponseEntity<Map<String, Object>> getScene(@PathVariable String sessionId) {
-        var sceneOpt = sceneContextManager.getCurrentScene(sessionId);
+        String normalizedSessionId = normalizeSessionId(sessionId);
+        var sceneOpt = sceneContextManager.getCurrentScene(normalizedSessionId);
         Map<String, Object> result = sceneOpt
                 .map(scene -> {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("sessionId", sessionId);
+                    map.put("sessionId", normalizedSessionId);
                     map.put("videoId", scene.videoId());
                     map.put("sceneType", scene.sceneType());
                     map.put("detectedFood", scene.detectedFood());
@@ -139,7 +154,7 @@ public class ChatController {
                 })
                 .orElseGet(() -> {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("sessionId", sessionId);
+                    map.put("sessionId", normalizedSessionId);
                     map.put("active", false);
                     return map;
                 });
@@ -159,6 +174,10 @@ public class ChatController {
             prompt.append(scenePrompt).append("\n");
         }
         return prompt.toString();
+    }
+
+    private String normalizeSessionId(String sessionId) {
+        return sessionId == null || sessionId.isBlank() ? "default" : sessionId;
     }
 
     // ---- DTO ----

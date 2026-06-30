@@ -34,6 +34,15 @@ public class AuthController {
     }
 
     /**
+     * 微信小程序登录（与 callback 共用实现）
+     */
+    @Operation(summary = "微信小程序登录", description = "使用 wx.login 获取的 code 完成登录")
+    @PostMapping("/wechat/miniprogram/login")
+    public Result<AuthResponse> miniProgramLogin(@Valid @RequestBody WeChatCallbackRequest request) {
+        return weChatCallback(request);
+    }
+
+    /**
      * 手机号登录
      */
     @Operation(summary = "手机号登录", description = "使用手机号和验证码登录")

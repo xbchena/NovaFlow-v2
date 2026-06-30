@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.novaflow")
 @MapperScan("com.novaflow.recommendation.infra.persistence.mapper")
 @EnableFeignClients
 public class RecommendationServiceApplication {

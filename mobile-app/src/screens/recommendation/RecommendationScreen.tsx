@@ -12,16 +12,21 @@ import {
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { recommendationService } from '../../api';
-import { Colors, Typography, Spacing, BorderRadius, AnimationDuration } from '../../../theme/theme';
-import { Icons, FoodImagePlaceholder } from '../../../components/icons/Icons';
+import { VideoAnalysisResult } from '../../api/video';
+import { MainStackParamList } from '../../../App';
+import { Colors, Typography, Spacing, BorderRadius, AnimationDuration } from '../../theme/theme';
+import { Icons, FoodImagePlaceholder } from '../../components/icons/Icons';
 
-type Props = NativeStackScreenProps<any, 'Recommendation'>;
+type AnalysisData = NonNullable<VideoAnalysisResult['data']>;
+
+type Props = NativeStackScreenProps<MainStackParamList, 'Recommendation'>;
 
 const { width } = Dimensions.get('window');
 const CARD_WIDTH = (width - Spacing.xl * 2 - Spacing.md) / 2;
 
 export const RecommendationScreen: React.FC<Props> = ({ route, navigation }) => {
   const { videoId, analysisData } = route.params;
+  const analysis = analysisData as AnalysisData;
   const [selectedCategory, setSelectedCategory] = useState<'food' | 'places'>('food');
   const [favoriteFoods, setFavoriteFoods] = useState<Set<string>>(new Set());
   const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
@@ -82,7 +87,7 @@ export const RecommendationScreen: React.FC<Props> = ({ route, navigation }) => 
         },
         {
           text: '返回首页',
-          onPress: () => navigation.navigate('Home'),
+          onPress: () => navigation.navigate('Tabs'),
         },
       ]);
     } catch {
@@ -301,7 +306,7 @@ export const RecommendationScreen: React.FC<Props> = ({ route, navigation }) => 
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Scene Analysis */}
-        {analysisData.sceneType && (
+        {analysis.sceneType && (
           <View style={styles.sceneCard}>
             <View style={styles.sceneHeader}>
               <View style={styles.sceneTitleContainer}>
@@ -309,10 +314,10 @@ export const RecommendationScreen: React.FC<Props> = ({ route, navigation }) => 
                 <Text style={styles.sceneTitle}>场景识别</Text>
               </View>
               <View style={styles.sceneBadge}>
-                <Text style={styles.sceneBadgeText}>{analysisData.sceneType}</Text>
+                <Text style={styles.sceneBadgeText}>{analysis.sceneType}</Text>
               </View>
             </View>
-            <Text style={styles.sceneDescription}>{analysisData.sceneDescription}</Text>
+            <Text style={styles.sceneDescription}>{analysis.sceneDescription}</Text>
           </View>
         )}
 
@@ -343,20 +348,20 @@ export const RecommendationScreen: React.FC<Props> = ({ route, navigation }) => 
         </View>
 
         {/* Food Recommendations */}
-        {selectedCategory === 'food' && analysisData.recommendations && (
+        {selectedCategory === 'food' && analysis.recommendations && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>为您推荐</Text>
             <View style={styles.foodGrid}>
-              {analysisData.recommendations.map((item: any, index: number) => renderFoodCard(item, index))}
+              {analysis.recommendations.map((item: any, index: number) => renderFoodCard(item, index))}
             </View>
           </View>
         )}
 
         {/* Nearby Places */}
-        {selectedCategory === 'places' && analysisData.nearbyPlaces && (
+        {selectedCategory === 'places' && analysis.nearbyPlaces && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>附近地点</Text>
-            {analysisData.nearbyPlaces.map((place: any) => renderPlaceCard(place))}
+            {analysis.nearbyPlaces.map((place: any) => renderPlaceCard(place))}
           </View>
         )}
 
@@ -371,7 +376,7 @@ export const RecommendationScreen: React.FC<Props> = ({ route, navigation }) => 
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.primaryButton}
-            onPress={() => navigation.navigate('Home')}
+            onPress={() => navigation.navigate('Tabs')}
           >
             <Icons.Home size={20} color="#fff" />
             <Text style={styles.primaryButtonText}>返回首页</Text>

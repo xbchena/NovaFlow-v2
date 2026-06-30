@@ -1,8 +1,11 @@
-import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import appConfig from '../app.json';
+import Constants from 'expo-constants';
 
-const API_BASE_URL = appConfig.apiBaseUrl;
+import { ApiResult, normalizeApiResult } from './types';
+
+const API_BASE_URL =
+  Constants.expoConfig?.extra?.apiBaseUrl ?? 'https://api.novaflow.com/api/v1';
 
 class ApiClient {
   private client: AxiosInstance;
@@ -20,7 +23,6 @@ class ApiClient {
   }
 
   private setupInterceptors() {
-    // Request interceptor - add auth token
     this.client.interceptors.request.use(
       async (config: InternalAxiosRequestConfig) => {
         const token = await AsyncStorage.getItem('authToken');
@@ -32,40 +34,62 @@ class ApiClient {
       (error) => Promise.reject(error)
     );
 
-    // Response interceptor - handle token refresh
     this.client.interceptors.response.use(
-      (response) => response.data,
+      (response) => response,
       async (error: AxiosError) => {
         if (error.response?.status === 401) {
-          // Token expired, clear and redirect to login
           await AsyncStorage.multiRemove(['authToken', 'refreshToken', 'userInfo']);
-          // TODO: Navigate to login
         }
-        return Promise.reject(error.response?.data || error.message);
+        return Promise.reject(error);
       }
     );
   }
 
-  public get = (url: string, params?: any) => this.client.get(url, { params });
-  public post = (url: string, data?: any) => this.client.post(url, data);
-  public put = (url: string, data?: any) => this.client.put(url, data);
-  public delete = (url: string) => this.client.delete(url);
-  public patch = (url: string, data?: any) => this.client.patch(url, data);
+  private async wrap<T>(promise: Promise<{ data: unknown }>): Promise<ApiResult<T>> {
+    try {
+      const response = await promise;
+      return normalizeApiResult<T>(response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return normalizeApiResult<T>(error.response?.data ?? { message: error.message });
+      }
+      return { success: false, message: '网络请求失败' };
+    }
+  }
 
-  // Upload method for videos
-  public upload = (url: string, formData: FormData, onProgress?: (progress: number) => void) => {
-    return this.client.post(url, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      onUploadProgress: (progressEvent) => {
-        if (onProgress && progressEvent.total) {
-          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          onProgress(progress);
-        }
-      },
-    });
-  };
+  public get = <T = unknown>(url: string, params?: Record<string, unknown>): Promise<ApiResult<T>> =>
+    this.wrap<T>(this.client.get(url, { params }));
+
+  public post = <T = unknown>(url: string, data?: unknown): Promise<ApiResult<T>> =>
+    this.wrap<T>(this.client.post(url, data));
+
+  public put = <T = unknown>(url: string, data?: unknown): Promise<ApiResult<T>> =>
+    this.wrap<T>(this.client.put(url, data));
+
+  public delete = <T = unknown>(url: string): Promise<ApiResult<T>> =>
+    this.wrap<T>(this.client.delete(url));
+
+  public patch = <T = unknown>(url: string, data?: unknown): Promise<ApiResult<T>> =>
+    this.wrap<T>(this.client.patch(url, data));
+
+  public upload = <T = unknown>(
+    url: string,
+    formData: FormData,
+    onProgress?: (progress: number) => void
+  ): Promise<ApiResult<T>> =>
+    this.wrap<T>(
+      this.client.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          if (onProgress && progressEvent.total) {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            onProgress(progress);
+          }
+        },
+      })
+    );
 }
 
 export const apiClient = new ApiClient();

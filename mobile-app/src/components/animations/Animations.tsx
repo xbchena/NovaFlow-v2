@@ -5,7 +5,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { View, Animated, StyleSheet, Dimensions, Platform } from 'react-native';
-import { Colors, AnimationDuration } from '../theme/theme';
+import { Colors, AnimationDuration } from '../../theme/theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 

@@ -1,41 +1,49 @@
-import React, { useState, useRef, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
-import { CameraView, useCameraPermissions, CameraType } from 'expo-camera';
+import { Camera, CameraType } from 'expo-camera';
 import * as Location from 'expo-location';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { videoService, locationService } from '../../api';
 
-type Props = NativeStackScreenProps<any, 'Camera'>;
+import { MainStackParamList } from '../../../App';
+
+type Props = NativeStackScreenProps<MainStackParamList, 'Camera'>;
 
 export const CameraScreen: React.FC<Props> = ({ navigation }) => {
-  const [permission, requestPermission] = useCameraPermissions();
-  const [facing, setFacing] = useState<CameraType>('back');
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [facing, setFacing] = useState<CameraType>(CameraType.back);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
-  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(
+    null
+  );
 
-  const cameraRef = useRef<any>(null);
+  const cameraRef = useRef<Camera>(null);
   const timerRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    // 获取用户位置
+    (async () => {
+      const cameraPermission = await Camera.requestCameraPermissionsAsync();
+      const microphonePermission = await Camera.requestMicrophonePermissionsAsync();
+      setHasPermission(
+        cameraPermission.status === 'granted' && microphonePermission.status === 'granted'
+      );
+    })();
+
     Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced })
-      .then(loc => {
+      .then((loc) => {
         setUserLocation({
           latitude: loc.coords.latitude,
           longitude: loc.coords.longitude,
         });
       })
-      .catch(() => {
-        // 忽略位置错误
-      });
+      .catch(() => undefined);
 
     return () => {
       if (timerRef.current) {
@@ -44,15 +52,24 @@ export const CameraScreen: React.FC<Props> = ({ navigation }) => {
     };
   }, []);
 
-  if (!permission) {
-    return <ActivityIndicator />;
+  if (hasPermission === null) {
+    return <ActivityIndicator style={styles.loader} />;
   }
 
-  if (!permission.granted) {
+  if (!hasPermission) {
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>需要相机权限来录制视频</Text>
-        <TouchableOpacity style={styles.button} onPress={requestPermission}>
+        <Text style={styles.message}>需要相机和麦克风权限来录制视频</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={async () => {
+            const cameraPermission = await Camera.requestCameraPermissionsAsync();
+            const microphonePermission = await Camera.requestMicrophonePermissionsAsync();
+            setHasPermission(
+              cameraPermission.status === 'granted' && microphonePermission.status === 'granted'
+            );
+          }}
+        >
           <Text style={styles.buttonText}>授予权限</Text>
         </TouchableOpacity>
       </View>
@@ -60,18 +77,36 @@ export const CameraScreen: React.FC<Props> = ({ navigation }) => {
   }
 
   const toggleCameraFacing = () => {
-    setFacing(current => (current === 'back' ? 'front' : 'back'));
+    setFacing((current) =>
+      current === CameraType.back ? CameraType.front : CameraType.back
+    );
+  };
+
+  const stopRecording = () => {
+    if (cameraRef.current && isRecording) {
+      cameraRef.current.stopRecording();
+      setIsRecording(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    }
+  };
+
+  const handleVideoProcess = (uri: string) => {
+    navigation.replace('UploadProgress', { videoUri: uri, location: userLocation });
   };
 
   const startRecording = async () => {
-    if (!cameraRef.current) return;
+    if (!cameraRef.current) {
+      return;
+    }
 
     try {
       setIsRecording(true);
       setRecordingTime(0);
 
       timerRef.current = setInterval(() => {
-        setRecordingTime(prev => {
+        setRecordingTime((prev) => {
           if (prev >= 60) {
             stopRecording();
             return prev;
@@ -85,30 +120,22 @@ export const CameraScreen: React.FC<Props> = ({ navigation }) => {
         quality: '720p',
       });
 
+      setIsRecording(false);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+
       if (video?.uri) {
         handleVideoProcess(video.uri);
       }
     } catch (error) {
       console.error('Recording error:', error);
+      Alert.alert('录制失败', '请重试');
       setIsRecording(false);
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
     }
-  };
-
-  const stopRecording = () => {
-    if (cameraRef.current && isRecording) {
-      cameraRef.current.stopRecording();
-      setIsRecording(false);
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    }
-  };
-
-  const handleVideoProcess = async (uri: string) => {
-    navigation.replace('UploadProgress', { videoUri: uri, location: userLocation });
   };
 
   const formatTime = (seconds: number) => {
@@ -119,13 +146,10 @@ export const CameraScreen: React.FC<Props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
+      <Camera ref={cameraRef} style={styles.camera} type={facing} ratio="16:9">
         <View style={styles.overlay}>
           <View style={styles.topBar}>
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => navigation.goBack()}
-            >
+            <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
               <Text style={styles.closeButtonText}>✕</Text>
             </TouchableOpacity>
             {isRecording && (
@@ -151,13 +175,14 @@ export const CameraScreen: React.FC<Props> = ({ navigation }) => {
             <View style={styles.placeholder} />
           </View>
         </View>
-      </CameraView>
+      </Camera>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#000' },
+  loader: { flex: 1 },
   message: {
     color: '#fff',
     textAlign: 'center',
@@ -199,9 +224,10 @@ const styles = StyleSheet.create({
   },
   recordingTime: { color: '#fff', fontSize: 14, fontWeight: '600' },
   bottomBar: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     paddingBottom: 50,
     paddingHorizontal: 30,
   },

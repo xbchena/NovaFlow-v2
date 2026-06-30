@@ -1,5 +1,0 @@
-{
-  "apiBaseUrl": "https://api.novaflow.com/api/v1",
-  "wechatAppId": "your-wechat-app-id",
-  "enableDevTools": false
-}

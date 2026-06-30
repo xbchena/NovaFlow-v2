@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class VideoAnalysisServiceImpl implements VideoAnalysisService {
+
+    private static final String CHAT_MEMORY_CONVERSATION_ID = "chat_memory_conversation_id";
 
     private final ChatClient videoAnalysisChatClient;
     private final ChatClient chatClient;
@@ -29,6 +32,13 @@ public class VideoAnalysisServiceImpl implements VideoAnalysisService {
 
     // 存储视频分析结果的缓存
     private final Map<String, AnalysisResult> analysisCache = new ConcurrentHashMap<>();
+
+    public VideoAnalysisServiceImpl(
+            @Qualifier("videoAnalysisChatClient") ChatClient videoAnalysisChatClient,
+            @Lazy ChatClient chatClient) {
+        this.videoAnalysisChatClient = videoAnalysisChatClient;
+        this.chatClient = chatClient;
+    }
 
     @Override
     public AnalysisResult analyzeVideo(String videoId) {
@@ -119,11 +129,13 @@ public class VideoAnalysisServiceImpl implements VideoAnalysisService {
      * @return AI 响应
      */
     public String chat(String sessionId, String userMessage) {
-        log.info("处理对话请求: sessionId={}, message={}", sessionId, userMessage);
+        String conversationId = normalizeSessionId(sessionId);
+        log.info("处理对话请求: sessionId={}, message={}", conversationId, userMessage);
 
         try {
             // 使用带记忆的 ChatClient 进行对话
             return chatClient.prompt()
+                    .advisors(advisor -> advisor.param(CHAT_MEMORY_CONVERSATION_ID, conversationId))
                     .user(userMessage)
                     .call()
                     .content();
@@ -132,6 +144,10 @@ public class VideoAnalysisServiceImpl implements VideoAnalysisService {
             log.error("对话处理失败: sessionId={}, error={}", sessionId, e.getMessage(), e);
             throw new RuntimeException("对话处理失败: " + e.getMessage(), e);
         }
+    }
+
+    private String normalizeSessionId(String sessionId) {
+        return sessionId == null || sessionId.isBlank() ? "default" : sessionId;
     }
 
     /**

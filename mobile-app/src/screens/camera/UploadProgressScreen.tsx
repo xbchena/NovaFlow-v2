@@ -8,9 +8,11 @@ import {
   Alert,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+import { MainStackParamList } from '../../../App';
 import { videoService } from '../../api';
 
-type Props = NativeStackScreenProps<any, 'UploadProgress'>;
+type Props = NativeStackScreenProps<MainStackParamList, 'UploadProgress'>;
 
 export const UploadProgressScreen: React.FC<Props> = ({ route, navigation }) => {
   const { videoUri, location } = route.params;
@@ -45,15 +47,14 @@ export const UploadProgressScreen: React.FC<Props> = ({ route, navigation }) => 
           }
         );
 
-        if (analysisResult.success && analysisResult.data) {
+        if (analysisResult.success && analysisResult.data && result.videoId) {
           setStage('done');
           setProgress(100);
 
-          // Navigate to recommendation screen
           setTimeout(() => {
             navigation.replace('Recommendation', {
-              videoId: result.videoId,
-              analysisData: analysisResult.data,
+              videoId: result.videoId as string,
+              analysisData: analysisResult.data as NonNullable<typeof analysisResult.data>,
             });
           }, 500);
         } else {
