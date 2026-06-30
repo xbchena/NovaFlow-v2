@@ -1,0 +1,19 @@
+package com.novaflow.feedback.infra.messaging.config;
+
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class RocketMQProducerConfig {
+
+    @Bean(initMethod = "start", destroyMethod = "shutdown")
+    public DefaultMQProducer defaultMQProducer(
+            @Value("${rocketmq.producer.group}") String producerGroup,
+            @Value("${rocketmq.name-server}") String nameServer) {
+        DefaultMQProducer producer = new DefaultMQProducer(producerGroup);
+        producer.setNamesrvAddr(nameServer);
+        return producer;
+    }
+}
